@@ -1,0 +1,39 @@
+name: Continuous Integration
+
+on: [push]
+
+jobs:
+
+  lint_and_test:
+    runs-on: ubuntu-latest
+    steps:
+
+        - name: Set up python
+          uses: actions/setup-python@v2
+          with:
+              python-version: {{cookiecutter.python_version}}
+
+        - name: Check out repository
+          uses: actions/checkout@v2
+
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+          with:
+              virtualenvs-in-project: true
+{% raw %}
+        - name: Load cached venv
+          id: cached-poetry-dependencies
+          uses: actions/cache@v2
+          with:
+              path: .venv
+              key: venv-${{ hashFiles('**/poetry.lock') }}
+{% endraw %}
+        - name: Install dependencies
+          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+          run: poetry install --no-interaction
+
+        - name: Run tests
+          run: poetry run make test
+
+        - name: Build Docker Image
+          run: poetry run make build
