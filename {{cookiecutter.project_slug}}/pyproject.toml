@@ -27,10 +27,10 @@ pip-audit = "*"
 
 [tool.isort]
 profile = "black"
-line_length = 100
+line_length = {{cookiecutter.line_length}}
 
 [tool.blue]
-line-length = 100
+line-length = {{cookiecutter.line_length}}
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning"]

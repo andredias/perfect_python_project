@@ -1,4 +1,4 @@
 [flake8]
-max_line_length = 100
-exclude = .venv,.mypy_cache,.pytest_cache
+max_line_length = {{cookiecutter.line_length}}
+exclude = .venv,.mypy_cache,.pytest_cache,.coverage,htmlcov
 ignore = PT013,PT018,W503
