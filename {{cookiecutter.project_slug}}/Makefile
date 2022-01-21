@@ -12,7 +12,7 @@ lint:
 	@echo
 	mypy .
 	@echo
-	bandit -r app/
+	bandit -qr app/
 	@echo
 	pip-audit
 
