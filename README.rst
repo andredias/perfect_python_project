@@ -9,9 +9,9 @@ Features
 * Python 3.10+ (configurable)
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
-* Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
-* Linting based on flake8_ (and plugins), blue_, mypy_ and isort_
-* Asynchronous tests based on pytest_
+* Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
+* Linting based on flake8_ (and plugins), blue_, mypy_, isort_ and others
+* Tests based on pytest_
 
 
 Instructions
@@ -23,7 +23,6 @@ You must have pipx_ and cookiecutter_ installed:
 
     $ pip install --user pipx
     $ pipx ensurepath
-    $ pipx install cookiecutter
 
 
 Usage
@@ -33,13 +32,16 @@ You can use this template directly from its repository:
 
 .. code:: console
 
-    $ cookiecutter https://github.com/andredias/cookiecutter-perfect-python-project.git
+    $ pipx run cookiecutter gh:andredias/perfect_python_project
 
 
 You will be prompted to enter a bunch of project config values.
 Then,
-Cookiecutter will generate a project from the template,
-using the values that you entered.
+Cookiecutter will generate a project from the template in a directory relative to the current one.
+
+.. note::
+
+    You can define a different ouput directory by passing the ``--output-dir`` flag.
 
 That's it!
 
