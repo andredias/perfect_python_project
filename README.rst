@@ -1,5 +1,5 @@
-Cookiecutter Perfect Python Project
-===================================
+Perfect Python Project
+======================
 
 This template generator creates the basic structure for a Python project.
 
@@ -17,7 +17,7 @@ Features
 Instructions
 ============
 
-You must have pipx_ and cookiecutter_ installed:
+You must have pipx_ installed:
 
 .. code:: console
 
