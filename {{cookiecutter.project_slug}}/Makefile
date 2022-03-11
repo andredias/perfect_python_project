@@ -1,6 +1,6 @@
 test:
 	pytest --cov-report term-missing --cov-report html --cov-branch \
-	       --cov app/
+	       --cov {{cookiecutter.project_slug}}/
 
 lint:
 	@echo
@@ -12,7 +12,7 @@ lint:
 	@echo
 	mypy .
 	@echo
-	bandit -qr app/
+	bandit -qr {{cookiecutter.project_slug}}/
 	@echo
 	pip-audit
 
