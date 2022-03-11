@@ -17,31 +17,40 @@ Features
 Instructions
 ============
 
-You must have pipx_ installed:
+Install cookiecutter_ using pipx_:
 
 .. code:: console
 
-    $ pip install --user pipx
-    $ pipx ensurepath
+    $ pipx install cookiecutter
 
-
-Usage
-=====
-
-You can use this template directly from its repository:
+Or, if you prefer, use `pip` instead:
 
 .. code:: console
 
-    $ pipx run cookiecutter gh:andredias/perfect_python_project
+    $ pip install --user cookiecutter
 
+Next, run the following command:
 
-You will be prompted to enter a bunch of project config values.
-Then,
-Cookiecutter will generate a project from the template in a directory relative to the current one.
+.. code:: console
 
-.. note::
+    $ cookiecutter gh:andredias/perfect_python_project
 
-    You can define a different ouput directory by passing the ``--output-dir`` flag.
+Answer a few questions:
+
+.. code:: text
+
+    author []: Fulano de Tal
+    email []: fulano@email.com
+    project_name [Project]: Project X
+    project_slug [project_x]:
+    python_version [3.10]:
+    line_length [79]: 100
+    Select version_control:
+    1 - hg
+    2 - git
+    Choose from 1, 2 [1]: 1
+    github_respository_url []:
+
 
 That's it!
 
