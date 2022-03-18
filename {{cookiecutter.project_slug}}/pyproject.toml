@@ -14,7 +14,7 @@ python = "^{{cookiecutter.python_version}}"
 [tool.poetry.dev-dependencies]
 pytest = "*"
 pytest-cov = "*"
-blue = "0.5.2"
+blue = "*"
 flake8 = "*"
 flake8-debugger = "*"
 flake8-pytest-style = "*"
