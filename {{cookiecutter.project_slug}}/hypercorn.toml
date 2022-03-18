@@ -1,0 +1,5 @@
+worker_class = "uvloop"
+bind = "0.0.0.0:5000"
+accesslog = "-"
+errorlog = "-"
+access_log_format = "%(t)s %(h)s %(S)s %(r)s %(s)s"

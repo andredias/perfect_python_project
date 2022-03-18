@@ -1,5 +1,6 @@
 test:
-	pytest --cov-report term-missing --cov-report html --cov-branch \
+	ENV=testing \
+	pytest -x --cov-report term-missing --cov-report html --cov-branch \
 	       --cov {{cookiecutter.project_slug}}/
 
 lint:
@@ -21,6 +22,10 @@ format:
 	isort .
 	blue .
 	pyupgrade --py{{cookiecutter.python_version.replace('.', '')}}-plus **/*.py
+
+
+build:
+	docker build -t {{cookiecutter.project_slug}} .
 
 
 define git_pre_commit

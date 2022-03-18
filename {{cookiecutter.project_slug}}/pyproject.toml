@@ -10,20 +10,28 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = "^{{cookiecutter.python_version}}"
+fastapi = "*"
+hypercorn = "*"
+loguru = "*"
+orjson = "*"
+uvloop = "*"
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
-pytest-cov = "*"
+asgi-lifespan = "*"
+alt-pytest-asyncio = "*"
 blue = "0.5.2"
+bandit = "*"
 flake8 = "*"
 flake8-debugger = "*"
 flake8-pytest-style = "*"
+httpx = "*"
 isort = "*"
 mypy = "*"
 pep8-naming = "*"
-pyupgrade = "*"
-bandit = "*"
 pip-audit = "*"
+pytest = "*"
+pytest-cov = "*"
+pyupgrade = "*"
 
 [tool.isort]
 profile = "black"
