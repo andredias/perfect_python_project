@@ -19,7 +19,7 @@ uvloop = "*"
 [tool.poetry.dev-dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
-blue = "0.5.2"
+blue = "*"
 bandit = "*"
 flake8 = "*"
 flake8-debugger = "*"
