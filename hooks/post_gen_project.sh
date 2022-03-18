@@ -1,6 +1,8 @@
 #!/bin/bash
 
 poetry update
+poetry run make format
+
 if [ "{{cookiecutter.version_control}}" == "hg" ]; then
     hg init .
     if [ -n "{{cookiecutter.github_respository_url}}" ]; then
