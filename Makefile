@@ -17,4 +17,5 @@ test:
 
 	cd /tmp/$(TARGET_NAME); \
 	poetry run make test; \
-	poetry run make lint
+	poetry run make lint; \
+	make smoke_test

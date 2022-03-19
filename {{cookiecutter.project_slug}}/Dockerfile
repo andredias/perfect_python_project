@@ -37,4 +37,4 @@ COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.proj
 
 EXPOSE 5000
 
-CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:create_app"]
+CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:app"]

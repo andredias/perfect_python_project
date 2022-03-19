@@ -28,6 +28,12 @@ build:
 	docker build -t {{cookiecutter.project_slug}} .
 
 
+smoke_test: build
+	docker run --rm -d -p 5000:5000 --name {{cookiecutter.project_slug}} {{cookiecutter.project_slug}}
+	sleep 1; curl http://localhost:5000/hello
+	docker stop {{cookiecutter.project_slug}}
+
+
 define git_pre_commit
 #!/bin/bash
 cd $$(git rev-parse --show-toplevel)
