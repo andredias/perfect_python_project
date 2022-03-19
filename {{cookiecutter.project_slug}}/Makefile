@@ -30,7 +30,7 @@ build:
 
 smoke_test: build
 	docker run --rm -d -p 5000:5000 --name {{cookiecutter.project_slug}} {{cookiecutter.project_slug}}
-	sleep 1; curl http://localhost:5000/hello
+	sleep 2; curl http://localhost:5000/hello
 	docker stop {{cookiecutter.project_slug}}
 
 
