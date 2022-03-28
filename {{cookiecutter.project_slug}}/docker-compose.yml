@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+
+    db:
+        image: postgres:alpine
+        ports:
+            - "${DB_PORT}:5432"
+        environment:
+            POSTGRES_DB: $DB_NAME
+            POSTGRES_PASSWORD: $DB_PASSWORD

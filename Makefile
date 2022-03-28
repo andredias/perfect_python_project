@@ -1,4 +1,4 @@
-TARGET_NAME := "fastapi_minimum_project"
+TARGET_NAME := "fastapi_complete"
 
 test:
 	@echo Target: /tmp/$(TARGET_NAME)

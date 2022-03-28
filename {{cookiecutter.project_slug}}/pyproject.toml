@@ -9,11 +9,17 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = "^{{cookiecutter.python_version}}"
+asyncpg = "*"
+databases = "*"
+email_validator = "*"
 fastapi = "*"
 hypercorn = "*"
 loguru = "*"
 orjson = "*"
+passlib = { extras = ["argon2"], version = "*" }
+psycopg2 = "*"
+python = "^{{cookiecutter.python_version}}"
+tenacity = "*"
 uvloop = "*"
 
 [tool.poetry.dev-dependencies]
@@ -21,6 +27,7 @@ asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
 blue = "*"
 bandit = "*"
+Faker = "*"
 flake8 = "*"
 flake8-debugger = "*"
 flake8-pytest-style = "*"

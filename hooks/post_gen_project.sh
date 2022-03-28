@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cp sample.env .env
 poetry update
 poetry run make format
 

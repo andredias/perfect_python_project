@@ -1,7 +1,18 @@
+run:
+	@ docker-compose up -d; \
+	trap 'docker-compose stop' INT; \
+	export $$(grep -v '^#.*' .env | xargs); \
+	hypercorn --reload --config=hypercorn.toml 'app.main:app'
+
+
 test:
+	@ docker-compose up -d; \
+	trap 'docker-compose stop' INT; \
+	export $$(grep -v '^#.*' .env | xargs); \
 	ENV=testing \
 	pytest -x --cov-report term-missing --cov-report html --cov-branch \
 	       --cov {{cookiecutter.project_slug}}/
+
 
 lint:
 	@echo
@@ -29,9 +40,10 @@ build:
 
 
 smoke_test: build
-	docker run --rm -d -p 5000:5000 --name {{cookiecutter.project_slug}} {{cookiecutter.project_slug}}
+	docker-compose -f docker-compose.yml -f docker-compose.smoke_test.yml up -d
 	sleep 2; curl http://localhost:5000/hello
-	docker stop {{cookiecutter.project_slug}}
+	docker-compose -f docker-compose.yml -f docker-compose.smoke_test.yml down
+
 
 
 define git_pre_commit

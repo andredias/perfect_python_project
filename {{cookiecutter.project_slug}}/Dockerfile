@@ -27,6 +27,12 @@ RUN . /venv/bin/activate; \
 
 FROM python:{{cookiecutter.python_version}}-slim as final
 
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y --no-install-recommends libpq-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /venv /venv
 ENV PATH=/venv/bin:${PATH}
 
