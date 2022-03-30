@@ -9,11 +9,12 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = "^{{cookiecutter.python_version}}"
 fastapi = "*"
 hypercorn = "*"
 loguru = "*"
 orjson = "*"
+python = "^{{cookiecutter.python_version}}"
+python-dotenv = "*"
 uvloop = "*"
 
 [tool.poetry.dev-dependencies]

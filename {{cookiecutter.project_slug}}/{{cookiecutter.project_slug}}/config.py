@@ -1,5 +1,9 @@
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 ENV = os.getenv('ENV', 'production').lower()
 if ENV not in ('production', 'development', 'testing'):
     raise ValueError(
