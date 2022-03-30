@@ -47,4 +47,4 @@ smoke_test: build
 
 
 install_hooks:
-	@ python scripts/install_hooks.py
+	@ scripts/install_hooks.sh
