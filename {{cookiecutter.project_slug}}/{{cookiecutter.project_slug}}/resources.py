@@ -10,7 +10,7 @@ from tenacity import RetryError, retry, stop_after_delay, wait_exponential
 from . import config
 from .models import metadata
 
-db = Database(config.DATABASE_URL)
+db = Database(config.DATABASE_URL, force_rollback=config.TESTING)
 
 
 async def startup() -> None:
