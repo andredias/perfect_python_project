@@ -19,6 +19,7 @@ orjson = "*"
 passlib = { extras = ["argon2"], version = "*" }
 psycopg2 = "*"
 python = "^{{cookiecutter.python_version}}"
+python-dotenv = "*"
 tenacity = "*"
 uvloop = "*"
 
