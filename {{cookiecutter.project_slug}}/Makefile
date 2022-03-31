@@ -34,9 +34,7 @@ build:
 
 
 smoke_test: build
-	docker-compose -f docker-compose.yml -f docker-compose.smoke_test.yml up -d
-	sleep 2; curl http://localhost:5000/hello
-	docker-compose -f docker-compose.yml -f docker-compose.smoke_test.yml down
+	@ scripts/smoke_test.py
 
 
 
