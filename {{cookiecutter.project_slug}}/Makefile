@@ -1,15 +1,11 @@
 run:
 	@ docker-compose up -d; \
-	trap 'docker-compose stop' INT; \
+	trap 'docker-compose down' INT; \
 	hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
 
 
 test:
-	@ docker-compose up -d; \
-	trap 'docker-compose stop' INT; \
-	ENV=testing \
-	pytest -x --cov-report term-missing --cov-report html --cov-branch \
-	       --cov {{cookiecutter.project_slug}}/
+	@ scripts/test_project.py
 
 
 lint:
