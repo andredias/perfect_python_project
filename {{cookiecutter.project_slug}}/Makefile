@@ -1,14 +1,12 @@
 run:
 	@ docker-compose up -d; \
 	trap 'docker-compose stop' INT; \
-	export $$(grep -v '^#.*' .env | xargs); \
-	hypercorn --reload --config=hypercorn.toml 'app.main:app'
+	hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
 
 
 test:
 	@ docker-compose up -d; \
 	trap 'docker-compose stop' INT; \
-	export $$(grep -v '^#.*' .env | xargs); \
 	ENV=testing \
 	pytest -x --cov-report term-missing --cov-report html --cov-branch \
 	       --cov {{cookiecutter.project_slug}}/
