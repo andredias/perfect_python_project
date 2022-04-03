@@ -9,6 +9,8 @@ MAX_ID = 2 ** 31
 
 def random_id() -> int:
     """
+    Return a random integer to be used as ID.
+
     Auto-incremented IDs are not particularly good for users as primary keys.
     1. Sequential IDs are guessable.
        One might guess that admin is always user with ID 1, for example.
