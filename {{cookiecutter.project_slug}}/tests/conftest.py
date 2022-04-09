@@ -7,16 +7,23 @@ from pytest import fixture
 
 from {{cookiecutter.project_slug}}.main import app as _app
 from {{cookiecutter.project_slug}}.models.user import get_all, insert
+from {{cookiecutter.project_slug}}.resources import db
 from {{cookiecutter.project_slug}}.schemas.user import UserInfo, UserInsert
 
 
-@fixture
-async def app() -> AsyncIterable[FastAPI]:
+@fixture(scope='session')
+async def session_app() -> AsyncIterable[FastAPI]:
     """
     Create a FastAPI instance.
     """
     async with LifespanManager(_app):
         yield _app
+
+
+@fixture
+async def app(session_app: FastAPI) -> AsyncIterable[FastAPI]:
+    async with db.transaction(force_rollback=True):
+        yield session_app
 
 
 @fixture
@@ -29,8 +36,8 @@ async def client(app: FastAPI) -> AsyncIterable[AsyncClient]:
         yield client
 
 
-@fixture
-async def users(app: FastAPI) -> list[UserInfo]:
+@fixture(scope='session')
+async def users(session_app: FastAPI) -> list[UserInfo]:
     """
     Populate the database with users.
     """
