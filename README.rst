@@ -55,6 +55,13 @@ Answer a few questions:
 That's it!
 
 
+References
+==========
+
+* `How to Set up a Perfect Python Project <https://blog.pronus.io/en/posts/python/how-to-set-up-a-perfect-python-project/>`_.
+  It describes all the design decisions used in this template.
+
+
 .. _blue: https://pypi.org/project/blue/
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
 .. _flake8: https://pypi.org/project/flake8/
