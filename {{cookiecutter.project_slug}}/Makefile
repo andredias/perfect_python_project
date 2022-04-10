@@ -1,7 +1,12 @@
+run:
+	hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
+
+
 test:
 	ENV=testing \
 	pytest -x --cov-report term-missing --cov-report html --cov-branch \
 	       --cov {{cookiecutter.project_slug}}/
+
 
 lint:
 	@echo
