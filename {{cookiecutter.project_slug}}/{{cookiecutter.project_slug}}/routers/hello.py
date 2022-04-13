@@ -7,4 +7,4 @@ router = APIRouter()
 @router.get('/hello')
 async def hello_world() -> dict[str, str]:
     logger.info('Hello world!')
-    return {'Hello': 'World'}
+    return {'message': 'Hello World'}
