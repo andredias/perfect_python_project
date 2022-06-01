@@ -9,9 +9,9 @@ jobs:
     steps:
 
         - name: Set up python
-          uses: actions/setup-python@v2
+          uses: actions/setup-python@v3
           with:
-              python-version: {{cookiecutter.python_version}}
+              python-version: '{{cookiecutter.python_version}}'
 
         - name: Check out repository
           uses: actions/checkout@v2
