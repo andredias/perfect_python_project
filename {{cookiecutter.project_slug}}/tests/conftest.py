@@ -1,3 +1,4 @@
+import os
 from typing import AsyncIterable
 
 from asgi_lifespan import LifespanManager
@@ -5,7 +6,9 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 from pytest import fixture
 
-from {{cookiecutter.project_slug}}.main import app as _app
+os.environ['ENV'] = 'testing'
+
+from {{cookiecutter.project_slug}}.main import app as _app  # noqa: E402
 
 
 @fixture
