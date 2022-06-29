@@ -1,3 +1,4 @@
+import os
 from typing import AsyncIterable
 
 from asgi_lifespan import LifespanManager
@@ -5,10 +6,12 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 from pytest import fixture
 
-from {{cookiecutter.project_slug}}.main import app as _app
-from {{cookiecutter.project_slug}}.models.user import get_all, insert
-from {{cookiecutter.project_slug}}.resources import db
-from {{cookiecutter.project_slug}}.schemas.user import UserInfo, UserInsert
+os.environ['ENV'] = 'testing'
+
+from {{cookiecutter.project_slug}}.main import app as _app  # noqa: E402
+from {{cookiecutter.project_slug}}.models.user import get_all, insert  # noqa: E402
+from {{cookiecutter.project_slug}}.resources import db  # noqa: E402
+from {{cookiecutter.project_slug}}.schemas.user import UserInfo, UserInsert  # noqa: E402
 
 
 @fixture(scope='session')
@@ -28,11 +31,7 @@ async def app(session_app: FastAPI) -> AsyncIterable[FastAPI]:
 
 @fixture
 async def client(app: FastAPI) -> AsyncIterable[AsyncClient]:
-    async with AsyncClient(
-        app=app,
-        base_url='http://testserver',
-        headers={'Content-Type': 'application/json'},
-    ) as client:
+    async with AsyncClient(app=app, base_url='http://testserver') as client:
         yield client
 
 
