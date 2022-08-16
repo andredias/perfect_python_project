@@ -12,23 +12,23 @@ build-backend = "poetry.core.masonry.api"
 python = "^{{cookiecutter.python_version}}"
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
-pytest-cov = "*"
+bandit = "*"
 blue = "*"
 flake8 = "*"
 flake8-debugger = "*"
 flake8-pytest-style = "*"
 isort = "*"
 mypy = "*"
-pep8-naming = "*"
-pyupgrade = "*"
-bandit = "*"
 pip-audit = "*"
+pep8-naming = "*"
+pytest = "*"
+pytest-cov = "*"
+pyupgrade = "*"
 
 [tool.isort]
-profile = "black"
 line_length = {{cookiecutter.line_length}}
 
+profile = "black"
 [tool.blue]
 line-length = {{cookiecutter.line_length}}
 
