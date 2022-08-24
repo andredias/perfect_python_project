@@ -1,3 +1,5 @@
+SHELL := /bin/bash -O globstar
+
 test:
 	pytest --cov-report term-missing --cov-report html --cov-branch \
 	       --cov {{cookiecutter.project_slug}}/
