@@ -28,14 +28,14 @@ async def get_all() -> list[UserInfo]:
     return [UserInfo(**r) for r in result]
 
 
-async def get_user_by_email(email: str) -> Optional[UserInfo]:
+async def get_user_by_email(email: str) -> UserInfo | None:
     query = User.select(User.c.email == email)
     logger.debug(query)
     result = await db.fetch_one(query)
     return UserInfo(**result) if result else None
 
 
-async def get_user_by_login(email: str, password: str) -> Optional[UserInfo]:
+async def get_user_by_login(email: str, password: str) -> UserInfo | None:
     query = User.select(User.c.email == email)
     logger.debug(query)
     result = await db.fetch_one(query)
@@ -44,7 +44,7 @@ async def get_user_by_login(email: str, password: str) -> Optional[UserInfo]:
     return None
 
 
-async def get_user(id_: int) -> Optional[UserInfo]:
+async def get_user(id_: int) -> UserInfo | None:
     query = User.select(User.c.id == id_)
     logger.debug(query)
     result = await db.fetch_one(query)
