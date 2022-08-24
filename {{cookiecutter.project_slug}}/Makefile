@@ -1,3 +1,6 @@
+SHELL := /bin/bash -O globstar
+
+
 run:
 	hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
 
