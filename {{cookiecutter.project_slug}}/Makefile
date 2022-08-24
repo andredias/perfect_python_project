@@ -1,3 +1,6 @@
+SHELL := /bin/bash -O globstar
+
+
 run:
 	@ docker-compose up -d; \
 	trap 'docker-compose down' INT; \
