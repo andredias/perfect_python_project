@@ -33,7 +33,7 @@ Next, run the following command:
 
 .. code:: console
 
-    $ cookiecutter gh:andredias/perfect_python_project
+    $ cookiecutter gh:andredias/perfect_python_project -c fastapi-minimum
 
 Answer a few questions:
 
