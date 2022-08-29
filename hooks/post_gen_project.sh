@@ -4,6 +4,8 @@ cp sample.env .env
 poetry update
 poetry run make format
 
+commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/fastapi-complete"
+
 if [ "{{cookiecutter.version_control}}" == "hg" ]; then
     hg init .
     if [ -n "{{cookiecutter.github_respository_url}}" ]; then
@@ -12,7 +14,7 @@ default = {{cookiecutter.github_respository_url}}
 ' > .hg/hgrc
     fi
     hg add
-    hg commit -m 'Initial project structure'
+    hg commit -m "$commit_message"
 else
     mv .hgignore .gitignore
     git init .
@@ -20,7 +22,7 @@ else
         git remote add origin {{cookiecutter.github_respository_url}}
     fi
     git add -A .
-    git commit -m 'Initial project structure'
+    git commit -m "$commit_message"
 fi
 
 poetry run make install_hooks
