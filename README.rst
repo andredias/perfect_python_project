@@ -1,7 +1,9 @@
-Perfect Python Project
-======================
+Perfect Python Project Template
+===============================
 
-This template generator creates the basic structure for a Python project.
+This project template creates the basic structure for a Python project.
+The article `How to Set up a Perfect Python Project <https://blog.pronus.io/en/posts/python/how-to-set-up-a-perfect-python-project/>`_ describes all the design decisions used here.
+
 
 Features
 --------
@@ -53,13 +55,6 @@ Answer a few questions:
 
 
 That's it!
-
-
-References
-==========
-
-* `How to Set up a Perfect Python Project <https://blog.pronus.io/en/posts/python/how-to-set-up-a-perfect-python-project/>`_.
-  It describes all the design decisions used in this template.
 
 
 .. _blue: https://pypi.org/project/blue/
