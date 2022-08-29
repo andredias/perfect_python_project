@@ -1,7 +1,7 @@
-FastAPI Minimum Project
-=======================
+FastAPI Minimum Project Template
+================================
 
-This template generator creates the basic structure for a minimum FastAPI application.
+This project template creates the basic structure for a minimum FastAPI application.
 It is built from the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
 
 
@@ -63,13 +63,6 @@ Answer a few questions:
 
 
 That's it!
-
-
-References
-==========
-
-* `How to Set up a Perfect Python Project <https://blog.pronus.io/en/posts/python/how-to-set-up-a-perfect-python-project/>`_.
-  It describes all the design decisions used in this template.
 
 
 .. _alt-pytest-asyncio: https://pypi.org/project/alt-pytest-asyncio/
