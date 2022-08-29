@@ -2,7 +2,7 @@ FastAPI Project Template
 ========================
 
 This project template creates the basic structure for a FastAPI application.
-It is based on the `FastAPI Minimum Project <https://github.com/andredias/perfect_python_project/tree/fastapi-minimum>` version
+It is based on the `FastAPI Minimum Project <https://github.com/andredias/perfect_python_project/tree/fastapi-minimum>`_ version
 and also on the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
 
 
