@@ -14,10 +14,9 @@ app = FastAPI(
     title='{{cookiecutter.project_name}}',
     debug=config.DEBUG,
     default_response_class=ORJSONResponse,
-    on_startup=[startup],
-    on_shutdown=[shutdown],
+    on_startup=(startup,),
+    on_shutdown=(shutdown,),
 )
-
 
 for router in routers:
     app.include_router(router)
