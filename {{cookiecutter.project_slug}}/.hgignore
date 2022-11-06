@@ -25,6 +25,7 @@ cover/
 __pycache__
 .mypy_cache
 .pytest_cache
+.ruff_cache
 
 # Distribution / packaging
 .Python
