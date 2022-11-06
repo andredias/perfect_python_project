@@ -24,4 +24,4 @@ else
     git commit -m "$commit_message"
 fi
 
-poetry run make install_hooks
+make install_hooks
