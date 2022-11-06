@@ -29,17 +29,14 @@ alt-pytest-asyncio = "*"
 bandit = "*"
 blue = "*"
 Faker = "*"
-flake8 = "*"
-flake8-debugger = "*"
-flake8-pytest-style = "*"
 httpx = "*"
 isort = "*"
 mypy = "*"
-pep8-naming = "*"
 pip-audit = "*"
 pytest = "*"
 pytest-cov = "*"
 pyupgrade = "*"
+ruff = "*"
 
 [tool.isort]
 profile = "black"
@@ -54,3 +51,9 @@ filterwarnings = ["ignore::DeprecationWarning"]
 [tool.mypy]
 ignore_missing_imports = true
 disallow_untyped_defs = true
+
+[tool.ruff]
+line-length = {{cookiecutter.line_length}}
+select = ["A", "B", "C", "E", "F", "N", "T", "U"]
+per-file-ignores = { "__init__.py" = ["F401"] }
+target-version = "py{{cookiecutter.python_version.replace('.', '')}}"

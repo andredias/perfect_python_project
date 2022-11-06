@@ -18,7 +18,7 @@ lint:
 	@echo
 	blue --check --diff --color .
 	@echo
-	flake8 .
+	ruff .
 	@echo
 	mypy .
 	@echo
@@ -28,6 +28,7 @@ lint:
 
 
 format:
+	ruff --silent --exit-zero --fix .
 	isort .
 	blue .
 	pyupgrade --py{{cookiecutter.python_version.replace('.', '')}}-plus **/*.py
