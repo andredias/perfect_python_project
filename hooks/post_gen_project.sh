@@ -1,5 +1,6 @@
 #!/bin/bash
 
+poetry env use {{cookiecutter.python_version}}
 poetry update
 poetry run make format
 
