@@ -39,9 +39,9 @@ pyupgrade = "*"
 ruff = "*"
 
 [tool.isort]
-profile = "black"
 line_length = {{cookiecutter.line_length}}
 
+profile = "black"
 [tool.blue]
 line-length = {{cookiecutter.line_length}}
 
@@ -55,5 +55,6 @@ disallow_untyped_defs = true
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
 select = ["A", "B", "C", "E", "F", "N", "T", "U"]
+ignore = ["A003"]
 per-file-ignores = { "__init__.py" = ["F401"] }
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"

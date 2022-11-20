@@ -22,7 +22,7 @@ def run_smoke_test() -> None:
         result = get('http://localhost:5000/hello')
         assert result.status_code == 200
         assert result.json() == {'message': 'Hello World'}
-        print('Smoke test passed!')
+        print('Smoke test passed!')  # noqa: T201
     finally:
         # fmt: off
         check_call(
