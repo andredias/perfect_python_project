@@ -3,7 +3,7 @@
   "email": "",
   "project_name": "Perfect Python Project",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-  "python_version": "3.10",
+  "python_version": "3.11",
   "line_length": 79,
   "version_control": [
     "hg",

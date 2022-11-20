@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cp sample.env .env
+poetry env use {{cookiecutter.python_version}}
 poetry update
 poetry run make format
 
@@ -25,4 +26,4 @@ else
     git commit -m "$commit_message"
 fi
 
-poetry run make install_hooks
+make install_hooks
