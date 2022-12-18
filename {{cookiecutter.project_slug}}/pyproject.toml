@@ -38,6 +38,6 @@ disallow_untyped_defs = true
 
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
-select = ["A", "B", "C", "E", "F", "N", "T", "U"]
+select = ["A", "ARG", "B", "C", "C4", "E", "ERA", "F", "I", "N", "PLC", "PLE", "PLR", "PLW", "RET", "S", "T10", "T10", "UP", "W"]
 per-file-ignores = { "__init__.py" = ["F401"] }
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
