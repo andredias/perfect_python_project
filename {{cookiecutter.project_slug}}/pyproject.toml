@@ -20,21 +20,15 @@ uvloop = "*"
 [tool.poetry.dev-dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
-bandit = "*"
 blue = "*"
 httpx = "*"
-isort = "*"
 mypy = "*"
 pip-audit = "*"
 pytest = "*"
 pytest-cov = "*"
-pyupgrade = "*"
 ruff = "*"
 
-[tool.isort]
 profile = "black"
-line_length = {{cookiecutter.line_length}}
-
 [tool.blue]
 line-length = {{cookiecutter.line_length}}
 
@@ -48,5 +42,5 @@ disallow_untyped_defs = true
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
 select = ["A", "ARG", "B", "C", "C4", "E", "ERA", "F", "I", "N", "PLC", "PLE", "PLR", "PLW", "RET", "S", "T10", "T10", "UP", "W"]
-per-file-ignores = { "__init__.py" = ["F401"] }
+per-file-ignores = { "__init__.py" = ["F401"], "test*.py" = ["S101"] }
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"

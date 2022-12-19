@@ -12,24 +12,18 @@ test:
 
 lint:
 	@echo
-	isort --diff -c .
-	@echo
 	blue --check --diff --color .
 	@echo
 	ruff .
 	@echo
 	mypy .
 	@echo
-	bandit -qr {{cookiecutter.project_slug}}/
-	@echo
 	pip-audit
 
 
 format:
 	ruff --silent --exit-zero --fix .
-	isort .
 	blue .
-	pyupgrade --py{{cookiecutter.python_version.replace('.', '')}}-plus **/*.py
 
 
 build:
