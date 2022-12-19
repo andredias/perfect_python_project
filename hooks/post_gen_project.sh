@@ -2,7 +2,10 @@
 
 cp sample.env .env
 poetry env use {{cookiecutter.python_version}}
-poetry update
+counter=0
+until poetry update || [[ $counter -gt 2 ]]; do
+    ((counter++))
+done
 poetry run make format
 
 commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/fastapi-complete"

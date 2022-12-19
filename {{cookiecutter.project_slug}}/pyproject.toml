@@ -26,22 +26,15 @@ uvloop = "*"
 [tool.poetry.dev-dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
-bandit = "*"
 blue = "*"
 Faker = "*"
 httpx = "*"
-isort = "*"
 mypy = "*"
 pip-audit = "*"
 pytest = "*"
 pytest-cov = "*"
-pyupgrade = "*"
 ruff = "*"
 
-[tool.isort]
-line_length = {{cookiecutter.line_length}}
-
-profile = "black"
 [tool.blue]
 line-length = {{cookiecutter.line_length}}
 
@@ -54,7 +47,32 @@ disallow_untyped_defs = true
 
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
-select = ["A", "B", "C", "E", "F", "N", "T", "U"]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C",
+    "C4",
+    "E",
+    "ERA",
+    "F",
+    "I",
+    "N",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "RET",
+    "S",
+    "T10",
+    "T10",
+    "UP",
+    "W",
+]
 ignore = ["A003"]
-per-file-ignores = { "__init__.py" = ["F401"] }
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**" = ["ARG", "S"]
+"smoke_test.py" = ["S"]

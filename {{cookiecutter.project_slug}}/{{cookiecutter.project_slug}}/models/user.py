@@ -1,5 +1,3 @@
-from typing import Optional
-
 from loguru import logger
 from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, Table, Unicode
@@ -59,7 +57,7 @@ async def insert(user: UserInsert) -> int:
     stmt = User.insert().values(fields)
     logger.debug(stmt)
     await db.execute(stmt)
-    return id_
+    return id_  # noqa: RET504
 
 
 async def update(id_: int, patch: UserPatch) -> None:

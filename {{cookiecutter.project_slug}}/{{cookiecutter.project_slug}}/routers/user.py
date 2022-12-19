@@ -44,7 +44,7 @@ async def update_user(
         await update(id_, patch)
     except IntegrityConstraintViolationError:
         logger.info(f'Integrity violation in {user} vs {patch}')
-        raise HTTPException(422)
+        raise HTTPException(422) from None
     return
 
 
