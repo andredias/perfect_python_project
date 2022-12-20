@@ -23,14 +23,14 @@ async def get_all() -> list[UserInfo]:
     query = User.select()
     logger.debug(query)
     result = await db.fetch_all(query)
-    return [UserInfo(**r) for r in result]
+    return [UserInfo(**r._mapping) for r in result]
 
 
 async def get_user_by_email(email: str) -> UserInfo | None:
     query = User.select(User.c.email == email)
     logger.debug(query)
     result = await db.fetch_one(query)
-    return UserInfo(**result) if result else None
+    return UserInfo(**result._mapping) if result else None
 
 
 async def get_user_by_login(email: str, password: str) -> UserInfo | None:
@@ -38,7 +38,7 @@ async def get_user_by_login(email: str, password: str) -> UserInfo | None:
     logger.debug(query)
     result = await db.fetch_one(query)
     if result and crypt_ctx.verify(password, result['password_hash']):
-        return UserInfo(**result)
+        return UserInfo(**result._mapping)
     return None
 
 
@@ -46,7 +46,7 @@ async def get_user(id_: int) -> UserInfo | None:
     query = User.select(User.c.id == id_)
     logger.debug(query)
     result = await db.fetch_one(query)
-    return UserInfo(**result) if result else None
+    return UserInfo(**result._mapping) if result else None
 
 
 async def insert(user: UserInsert) -> int:
