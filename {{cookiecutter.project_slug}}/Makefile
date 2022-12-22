@@ -12,9 +12,9 @@ test:
 
 lint:
 	@echo
-	blue --check --diff --color .
-	@echo
 	ruff .
+	@echo
+	blue --check --diff --color .
 	@echo
 	mypy .
 	@echo
