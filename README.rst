@@ -12,7 +12,7 @@ Features
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
-* Linting based on ruff_ (and plugins), blue_, mypy_ and others
+* Linting based on ruff_, blue_, mypy_ and others
 * Tests based on pytest_
 
 
