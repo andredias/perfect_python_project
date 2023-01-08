@@ -12,20 +12,21 @@ Features
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
-* Linting based on flake8_ (and plugins), blue_, mypy_, isort_ and others
+* Linting based on ruff_ (and plugins), blue_, mypy_ and others
 * Tests based on pytest_
 
 
 Instructions
 ============
 
-Install cookiecutter_ using pipx_:
+To instantiate the template into a new project, you'll need cookiecutter_.
+The best way to use it just once is through pipx_:
 
 .. code:: console
 
-    $ pipx install cookiecutter
+    $ pipx run cookiecutter gh:andredias/perfect_python_project
 
-Or, if you prefer, use `pip` instead:
+If you prefer, use can install it throught `pip` instead:
 
 .. code:: console
 
@@ -59,9 +60,8 @@ That's it!
 
 .. _blue: https://pypi.org/project/blue/
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
-.. _flake8: https://pypi.org/project/flake8/
-.. _isort: https://pypi.org/project/isort/
 .. _mypy: http://mypy-lang.org/
 .. _pipx: https://pypa.github.io/pipx/
 .. _Poetry: https://python-poetry.org/
 .. _pytest: https://pytest.org
+.. _ruff: https://pypi.org/project/ruff/
