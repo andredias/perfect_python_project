@@ -10,19 +10,19 @@ from ..schemas.user import UserInfo, UserInsert, UserPatch
 router = APIRouter(prefix='/users', tags=['users'])
 
 
-@router.get('', response_model=list[UserInfo])
+@router.get('')
 async def get_all_users() -> list[UserInfo]:
     return await get_all()
 
 
 @router.post('', status_code=201)
 @db.transaction()
-async def insert_user(info: UserInsert) -> dict:
+async def insert_user(info: UserInsert) -> dict[str, int]:
     id_ = await insert(info)
     return {'id': id_}
 
 
-@router.get('/{id_}', response_model=UserInfo)
+@router.get('/{id_}')
 async def get_user_info(id_: int) -> UserInfo:
     user = await get_user(id_)
     if not user:
