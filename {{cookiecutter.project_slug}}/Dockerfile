@@ -1,8 +1,6 @@
 FROM python:{{cookiecutter.python_version}}-slim as builder
 LABEL maintainer="{{cookiecutter.author}} <{{cookiecutter.email}}>"
 
-USER root
-
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 

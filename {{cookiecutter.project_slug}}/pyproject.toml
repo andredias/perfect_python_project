@@ -74,5 +74,5 @@ target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
-"tests/**" = ["ARG", "S"]
+"tests/**" = ["ARG", "PLR2004", "S"]
 "smoke_test.py" = ["S"]
