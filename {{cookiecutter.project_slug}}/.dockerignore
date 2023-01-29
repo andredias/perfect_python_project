@@ -3,3 +3,4 @@
 !poetry.lock
 !hypercorn.toml
 !{{cookiecutter.project_slug}}/
+**/__pycache__
