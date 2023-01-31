@@ -1,21 +1,51 @@
 import os
+from pathlib import Path
+from subprocess import check_call
 from typing import AsyncIterable
 
 from asgi_lifespan import LifespanManager
+from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 from pytest import fixture
+from sqlalchemy.engine.url import make_url
 
 os.environ['ENV'] = 'testing'
 
+from {{cookiecutter.project_slug }} import config  # noqa: E402
 from {{cookiecutter.project_slug}}.main import app as _app  # noqa: E402
 from {{cookiecutter.project_slug}}.models.user import get_all, insert  # noqa: E402
-from {{cookiecutter.project_slug}}.resources import db  # noqa: E402
+from {{cookiecutter.project_slug}}.resources import connect_database, db  # noqa: E402
 from {{cookiecutter.project_slug}}.schemas.user import UserInfo, UserInsert  # noqa: E402
 
 
 @fixture(scope='session')
-async def session_app() -> AsyncIterable[FastAPI]:
+async def init_test_db() -> None:
+    """
+    Initialize the database.
+    """
+    url = make_url(config.DATABASE_URL).set(database='postgres')
+    db = Database(str(url))
+    await connect_database(db)
+
+    try:
+        stmt = f"select 1 from pg_database where datname='{config.DB_NAME}'"
+        db_exists = await db.execute(stmt)
+        if db_exists and os.getenv('RECREATE_DB', 0):
+            stmt = f'drop database {config.DB_NAME}'
+            await db.execute(stmt)
+            db_exists = False
+        if not db_exists:
+            stmt = f'create database {config.DB_NAME}'
+            await db.execute(stmt)
+    finally:
+        await db.disconnect()
+    check_call('alembic upgrade head'.split(), cwd=Path(__file__).parent.parent)
+    return
+
+
+@fixture(scope='session')
+async def session_app(init_test_db: None) -> AsyncIterable[FastAPI]:
     """
     Create a FastAPI instance.
     """

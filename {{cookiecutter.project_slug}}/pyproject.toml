@@ -9,6 +9,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
+alembic = "*"
 asyncpg = "*"
 databases = "*"
 email_validator = "*"
@@ -23,7 +24,7 @@ python-dotenv = "*"
 tenacity = "*"
 uvloop = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
 blue = "*"

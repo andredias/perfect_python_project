@@ -2,6 +2,7 @@
 
 from subprocess import check_call
 
+from fastapi import status
 from httpx import get
 from loguru import logger
 from tenacity import RetryError, retry, stop_after_delay, wait_exponential
@@ -20,7 +21,7 @@ def stop_containers() -> None:
 @retry(stop=stop_after_delay(3), wait=wait_exponential(multiplier=0.2))
 def health_check() -> None:
     result = get('http://localhost:5000/hello')
-    assert result.status_code == 200
+    assert result.status_code == status.HTTP_200_OK
     assert result.json() == {'message': 'Hello World'}
     logger.info('Smoke test passed!')
     return

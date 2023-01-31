@@ -6,6 +6,10 @@ counter=0
 until poetry update || [[ $counter -gt 2 ]]; do
     ((counter++))
 done
+docker-compose up -d db
+sleep 1
+poetry run alembic revision --autogenerate -m "Initial migration"
+docker-compose down
 poetry run make format
 
 commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/fastapi-complete"

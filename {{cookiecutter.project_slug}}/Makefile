@@ -9,7 +9,10 @@ run_dev: check_env
 
 
 test: check_env
-	@ scripts/test_project.py
+	docker-compose up -d;
+	ENV=testing pytest -x \
+		--cov-report=term-missing --cov-report=html --cov-branch \
+		--cov={{cookiecutter.project_slug}}
 
 
 lint:
