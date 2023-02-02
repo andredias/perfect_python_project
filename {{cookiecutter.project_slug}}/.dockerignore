@@ -1,4 +1,6 @@
 *
+!alembic*
+!entrypoint.py
 !pyproject.toml
 !poetry.lock
 !hypercorn.toml

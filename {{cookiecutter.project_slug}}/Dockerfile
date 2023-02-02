@@ -36,9 +36,10 @@ ENV PATH=/venv/bin:${PATH}
 
 WORKDIR /app
 USER nobody
-COPY --chown=nobody:nogroup hypercorn.toml .
+COPY --chown=nobody:nogroup entrypoint.py hypercorn.toml alembic.ini ./
+COPY --chown=nobody:nogroup alembic/ ./alembic
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
 EXPOSE 5000
 
-CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:app"]
+CMD ["python", "entrypoint.py"]
