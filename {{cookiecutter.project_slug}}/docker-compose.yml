@@ -10,3 +10,15 @@ services:
         environment:
             POSTGRES_DB: $DB_NAME
             POSTGRES_PASSWORD: $DB_PASSWORD
+
+    app:
+        container_name: {{cookiecutter.project_slug}}
+        image: {{cookiecutter.project_slug}}
+        ports:
+            - "5000:5000"
+        depends_on:
+            - db
+        env_file:
+            - .env
+        environment:
+            DB_HOST: db

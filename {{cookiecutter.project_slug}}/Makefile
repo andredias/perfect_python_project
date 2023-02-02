@@ -4,8 +4,7 @@ SHELL := /bin/bash -O globstar
 run_dev: check_env
 	@ docker-compose up -d; \
 	trap 'docker-compose down' INT; \
-	ENV=development \
-	   hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
+	ENV=development python entrypoint.py
 
 
 test: check_env
