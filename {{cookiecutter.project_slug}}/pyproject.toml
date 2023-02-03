@@ -41,10 +41,8 @@ disallow_untyped_defs = true
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
 select = [
-    "A",
     "ARG",
     "B",
-    "C",
     "C4",
     "E",
     "ERA",
@@ -62,7 +60,7 @@ select = [
     "UP",
     "W",
 ]
-ignore = ["A003", "B008"]
+ignore = ["B008"]
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
 
 [tool.ruff.per-file-ignores]
