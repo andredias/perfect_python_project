@@ -21,10 +21,12 @@ async def migrate() -> None:
 
 
 async def main() -> None:
+    command = 'hypercorn --config=hypercorn.toml {{cookiecutter.project_slug}}.main:app'.split()
     if os.getenv('ENV') != 'production':
         await migrate()
-
-    run('hypercorn --config=hypercorn.toml {{cookiecutter.project_slug}}.main:app'.split(), cwd=parent_path)
+        command.insert(1, '--reload')
+    run(command, cwd=parent_path)
+    return
 
 
 if __name__ == '__main__':
