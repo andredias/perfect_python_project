@@ -42,8 +42,8 @@ async def get_user_by_login(email: str, password: str) -> UserInfo | None:
     return None
 
 
-async def get_user(id_: int) -> UserInfo | None:
-    query = User.select(User.c.id == id_)
+async def get_user(user_id: int) -> UserInfo | None:
+    query = User.select(User.c.id == user_id)
     logger.debug(query)
     result = await db.fetch_one(query)
     return UserInfo(**result._mapping) if result else None
@@ -51,28 +51,28 @@ async def get_user(id_: int) -> UserInfo | None:
 
 async def insert(user: UserInsert) -> int:
     fields = user.dict()
-    id_ = fields['id'] = random_id()
+    user_id = fields['id'] = random_id()
     password = fields.pop('password')
     fields['password_hash'] = crypt_ctx.hash(password)
     stmt = User.insert().values(fields)
     logger.debug(stmt)
     await db.execute(stmt)
-    return id_  # noqa: RET504
+    return user_id  # noqa: RET504
 
 
-async def update(id_: int, patch: UserPatch) -> None:
+async def update(user_id: int, patch: UserPatch) -> None:
     fields = patch.dict(exclude_unset=True)
     if 'password' in fields:
         password = fields.pop('password')
         fields['password_hash'] = crypt_ctx.hash(password)
-    stmt = User.update().where(User.c.id == id_).values(**fields)
+    stmt = User.update().where(User.c.id == user_id).values(**fields)
     logger.debug(stmt)
     await db.execute(stmt)
     return
 
 
-async def delete(id_: int) -> None:
-    stmt = User.delete().where(User.c.id == id_)
+async def delete(user_id: int) -> None:
+    stmt = User.delete().where(User.c.id == user_id)
     logger.debug(stmt)
     await db.execute(stmt)
     return
