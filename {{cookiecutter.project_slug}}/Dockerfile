@@ -5,12 +5,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get -y upgrade && \
     apt-get install -y --no-install-recommends build-essential libffi-dev libxml2-dev \
     libxslt-dev curl libpq-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl https://install.python-poetry.org | python -
 
 RUN python -m venv /venv
