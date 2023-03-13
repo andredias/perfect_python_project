@@ -32,7 +32,10 @@ jobs:
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction
 
-        - name: Run tests
+        - name: Linting
+          run: poetry run make lint
+
+        - name: Test
           run: poetry run make test
 
         - name: Build Docker Image
