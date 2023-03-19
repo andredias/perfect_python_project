@@ -9,12 +9,12 @@ from tenacity import RetryError, retry, stop_after_delay, wait_exponential
 
 
 def init_containers() -> None:
-    command = 'docker-compose up -d'
+    command = 'docker compose up -d'
     check_call(command.split())
 
 
 def stop_containers() -> None:
-    command = 'docker-compose down'
+    command = 'docker compose down'
     check_call(command.split())
 
 
