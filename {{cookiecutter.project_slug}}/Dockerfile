@@ -11,6 +11,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV POETRY_VERSION=1.4.1
 RUN curl https://install.python-poetry.org | python -
 
 RUN python -m venv /venv
@@ -36,10 +37,10 @@ ENV PATH=/venv/bin:${PATH}
 
 WORKDIR /app
 USER nobody
-COPY --chown=nobody:nogroup entrypoint.py hypercorn.toml alembic.ini ./
+COPY --chown=nobody:nogroup entrypoint.sh migrate_database.py hypercorn.toml alembic.ini ./
 COPY --chown=nobody:nogroup alembic/ ./alembic
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
 EXPOSE 5000
 
-CMD ["python", "entrypoint.py"]
+CMD ["./entrypoint.sh"]

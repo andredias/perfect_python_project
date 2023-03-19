@@ -22,3 +22,4 @@ services:
             - .env
         environment:
             DB_HOST: db
+            ENV: ${ENV:-production}

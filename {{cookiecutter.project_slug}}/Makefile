@@ -2,9 +2,9 @@ SHELL := /bin/bash -O globstar
 
 
 run_dev: check_env
-	@ docker compose up -d; \
+	@ docker compose up db -d; \
 	trap 'docker compose down' INT; \
-	ENV=development python entrypoint.py
+	ENV=development poetry run ./entrypoint.sh
 
 
 test: check_env
