@@ -1,4 +1,3 @@
-
 from databases import Database
 from loguru import logger
 from tenacity import RetryError, retry, stop_after_delay, wait_exponential
@@ -20,13 +19,8 @@ async def shutdown() -> None:
 
 
 def show_config() -> None:
-    config_vars = {
-        key: getattr(config, key)
-        for key in sorted(dir(config))
-        if key.isupper()
-    }
+    config_vars = {key: getattr(config, key) for key in sorted(dir(config)) if key.isupper()}
     logger.debug(config_vars)
-    return
 
 
 async def connect_database(database: Database) -> None:

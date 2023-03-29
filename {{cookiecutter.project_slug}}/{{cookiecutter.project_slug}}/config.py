@@ -13,7 +13,7 @@ if ENV not in ('production', 'development', 'testing'):
 DEBUG: bool = ENV != 'production'
 TESTING: bool = ENV == 'testing'
 
-LOG_LEVEL: str = os.getenv('LOG_LEVEL') or (DEBUG and 'DEBUG') or 'INFO'
+os.environ['LOGURU_LEVEL'] = os.getenv('LOG_LEVEL') or (DEBUG and 'DEBUG') or 'INFO'
 os.environ['LOGURU_DEBUG_COLOR'] = '<fg #777>'
 
 DB_PASSWORD = os.environ['DB_PASSWORD']
