@@ -1,5 +1,3 @@
-from string import ascii_uppercase
-
 from loguru import logger
 
 from . import config
@@ -17,10 +15,5 @@ async def shutdown() -> None:
 
 
 def show_config() -> None:
-    config_vars = {
-        key: getattr(config, key)
-        for key in sorted(dir(config))
-        if key[0] in ascii_uppercase
-    }
+    config_vars = {key: getattr(config, key) for key in sorted(dir(config)) if key.isupper()}
     logger.debug(config_vars)
-    return
