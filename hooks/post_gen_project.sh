@@ -8,6 +8,7 @@ until poetry update || [[ $counter -gt 2 ]]; do
 done
 docker compose up -d db
 sleep 1
+rm alembic/versions/empty.txt
 poetry run alembic revision --autogenerate -m "Initial migration"
 docker compose down
 poetry run make format
