@@ -18,7 +18,7 @@ hypercorn = "*"
 loguru = "*"
 orjson = "*"
 passlib = { extras = ["argon2"], version = "*" }
-psycopg2 = "*"
+psycopg2-binary = "*"
 python = "^{{cookiecutter.python_version}}"
 python-dotenv = "*"
 tenacity = "*"
