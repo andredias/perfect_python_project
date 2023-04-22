@@ -2,9 +2,7 @@ FROM python:{{cookiecutter.python_version}}-slim as builder
 LABEL maintainer="{{cookiecutter.author}} <{{cookiecutter.email}}>"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y --no-install-recommends build-essential curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends build-essential curl
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
