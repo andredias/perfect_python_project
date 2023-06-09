@@ -1,6 +1,19 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from loguru import logger
+from fastapi import FastAPI
 
 from . import config
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator:  # noqa: ARG001
+    await startup()
+    try:
+        yield
+    finally:
+        await shutdown()
 
 
 async def startup() -> None:
