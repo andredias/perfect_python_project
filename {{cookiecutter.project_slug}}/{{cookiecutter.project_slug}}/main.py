@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from . import config
-from .resources import shutdown, startup
+from .resources import lifespan
 from .routers import hello, user
 
 routers = [
@@ -14,8 +14,7 @@ app = FastAPI(
     title='{{cookiecutter.project_name}}',
     debug=config.DEBUG,
     default_response_class=ORJSONResponse,
-    on_startup=(startup,),
-    on_shutdown=(shutdown,),
+    lifespan=lifespan,
 )
 
 for router in routers:

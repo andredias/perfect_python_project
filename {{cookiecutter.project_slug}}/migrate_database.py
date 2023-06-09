@@ -15,7 +15,7 @@ async def migrate() -> None:
     db = Database(config.DATABASE_URL)
     await connect_database(db)
     await db.disconnect()
-    run('alembic upgrade head'.split(), cwd=parent_path)
+    run('alembic upgrade head'.split(), cwd=parent_path)  # noqa: S603
     return
 
 
