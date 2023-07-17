@@ -31,8 +31,8 @@ class UserInsert(BaseModel):
 
 
 class UserPatch(BaseModel):
-    name: str | None
-    email: EmailStr | None
-    password: str | None
+    name: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None
 
     _password = validator('password', allow_reuse=True)(check_password)
