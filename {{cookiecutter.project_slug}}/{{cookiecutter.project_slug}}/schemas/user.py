@@ -1,6 +1,8 @@
 import json
+from typing_extensions import Annotated
 
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr
+from pydantic.functional_validators import AfterValidator
 
 from ..config import PASSWORD_MIN_LENGTH, PASSWORD_MIN_VARIETY
 
@@ -16,6 +18,9 @@ def check_password(password: str) -> str:
     return password
 
 
+Password = Annotated[str, AfterValidator(check_password)]
+
+
 class UserInfo(BaseModel):
     id: int
     name: str
@@ -25,14 +30,10 @@ class UserInfo(BaseModel):
 class UserInsert(BaseModel):
     name: str
     email: EmailStr
-    password: str
-
-    _password = validator('password', allow_reuse=True)(check_password)
+    password: Password
 
 
 class UserPatch(BaseModel):
     name: str | None = None
     email: EmailStr | None = None
-    password: str | None = None
-
-    _password = validator('password', allow_reuse=True)(check_password)
+    password: Password | None = None

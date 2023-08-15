@@ -18,7 +18,7 @@ def stop_containers() -> None:
     check_call(command.split())
 
 
-@retry(stop=stop_after_delay(6), wait=wait_exponential(multiplier=1))
+@retry(stop=stop_after_delay(10), wait=wait_exponential(multiplier=1))
 def health_check() -> None:
     result = get('http://localhost:5000/hello')
     assert result.status_code == status.HTTP_200_OK

@@ -1,5 +1,6 @@
 from fastapi import status
 from httpx import AsyncClient
+from pydantic import TypeAdapter
 
 from {{cookiecutter.project_slug}}.models.user import UserInfo, UserInsert, get_user_by_login
 
@@ -9,7 +10,7 @@ Users = list[UserInfo]
 async def test_get_users(users: Users, client: AsyncClient) -> None:
     resp = await client.get('/users')
     assert resp.status_code == status.HTTP_200_OK
-    assert resp.json() == users
+    assert TypeAdapter(Users).validate_python(resp.json()) == users
 
 
 async def test_get_user(users: Users, client: AsyncClient) -> None:
