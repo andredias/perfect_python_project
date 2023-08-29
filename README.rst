@@ -2,14 +2,16 @@ FastAPI Minimum Project Template
 ================================
 
 This project template creates the basic structure for a minimum FastAPI application.
-It is built from the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
+It extends the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
+
+The template design and structure is described in the article `Minimal Project in FastAPI <https://blog.pronus.io/en/posts/python/minimal-fastapi-project/>`_.
 
 
 Features
 --------
 
 * FastAPI_ web framework
-* Python 3.10+ (configurable)
+* Python 3.11+ (configurable)
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
@@ -32,7 +34,7 @@ The best way to use it just once is through pipx_:
 
 .. code:: console
 
-    $ pipx run cookiecutter gh:andredias/perfect_python_project
+    $ pipx run cookiecutter gh:andredias/perfect_python_project -c fastapi-minimum
 
 If you prefer, use can install it throught `pip` instead:
 
@@ -54,7 +56,7 @@ Answer a few questions:
     email []: fulano@email.com
     project_name [Project]: Project X
     project_slug [project_x]:
-    python_version [3.10]:
+    python_version [3.11]:
     line_length [79]: 100
     Select version_control:
     1 - hg
