@@ -16,7 +16,7 @@ python = "^{{cookiecutter.python_version}}"
 python-dotenv = "*"
 uvloop = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
 blue = "*"
