@@ -32,6 +32,7 @@ line-length = {{cookiecutter.line_length}}
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning"]
+default_async_timeout = 600
 
 [tool.mypy]
 ignore_missing_imports = true
