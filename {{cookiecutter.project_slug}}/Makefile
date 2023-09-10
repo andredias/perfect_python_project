@@ -1,4 +1,4 @@
-SHELL := /bin/bash -O globstar
+SHELL := /usr/bin/env bash -O globstar
 
 test:
 	pytest --cov-report term-missing --cov-report html --cov-branch \

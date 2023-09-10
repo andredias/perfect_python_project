@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 poetry env use {{cookiecutter.python_version}}
 counter=0
