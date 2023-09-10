@@ -1,16 +1,9 @@
 #!/bin/bash
 
 cp sample.env .env
+rm alembic/versions/empty.txt  # empty.txt was used to keep the alembic folder in version control
 poetry env use {{cookiecutter.python_version}}
-counter=0
-until poetry update || [[ $counter -gt 2 ]]; do
-    ((counter++))
-done
-docker compose up -d db
-sleep 1
-rm alembic/versions/empty.txt
-poetry run alembic revision --autogenerate -m "Initial migration"
-docker compose down
+poetry update
 poetry run make format
 
 commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/fastapi-complete"
@@ -35,3 +28,18 @@ else
 fi
 
 make install_hooks
+
+# initial migration for alembic
+docker compose up -d db
+sleep 1
+poetry run alembic revision --autogenerate -m "Initial migration"
+docker compose down
+
+# use a separated commit for the initial migration
+# so it can be easily reverted if needed
+poetry run make format
+if [ "{{cookiecutter.version_control}}" == "hg" ]; then
+    hg commit -Am 'Initial alembic migration'
+else
+    git commit -am 'Initial alembic migration'
+fi
