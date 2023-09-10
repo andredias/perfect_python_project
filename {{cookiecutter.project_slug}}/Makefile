@@ -1,4 +1,4 @@
-SHELL := /bin/bash -O globstar
+SHELL := /usr/bin/env bash -O globstar
 
 
 run_dev: check_env

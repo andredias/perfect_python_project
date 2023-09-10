@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cp sample.env .env
 rm alembic/versions/empty.txt  # empty.txt was used to keep the alembic folder in version control

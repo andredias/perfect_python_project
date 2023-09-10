@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-GIT_PRE_PUSH='#!/bin/bash
+GIT_PRE_PUSH='#!/usr/bin/env bash
 cd $(git rev-parse --show-toplevel)
 poetry run make lint && poetry run make test
 '
