@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash -O globstar
 
 
 run:
-	hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
+	ENV=development hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
 
 
 test:
