@@ -1,8 +1,12 @@
 SHELL := /usr/bin/env bash -O globstar
 
 
+run:
+	docker compose up --build
+
+
 run_dev:
-	ENV=development hypercorn --reload --config=hypercorn.toml '{{cookiecutter.project_slug}}.main:app'
+	ENV=development docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 
 test:
@@ -26,14 +30,13 @@ format:
 	blue .
 
 
-build:
-	docker build -t {{cookiecutter.project_slug}} .
-
-
-smoke_test: build
-	docker run --rm -d -p 5000:5000 --name {{cookiecutter.project_slug}} {{cookiecutter.project_slug}}
-	sleep 4; curl http://localhost:5000/hello
-	docker stop {{cookiecutter.project_slug}}
+smoke_test:
+	trap 'docker compose down' EXIT; \
+	docker compose up --build -d; \
+	sleep 4; \
+	httpx https://localhost/api/hello --http2 --no-verify -v; \
+	[ $$? -eq 0 ] || exit 1; \
+	echo 'Smoke test passed!'; exit 0
 
 
 install_hooks:

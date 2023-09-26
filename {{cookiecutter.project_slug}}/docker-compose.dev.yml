@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+    app:
+        command:
+            [
+                "hypercorn",
+                "--config=hypercorn.toml",
+                "--reload",
+                "--root-path=/api",
+                "{{cookiecutter.project_slug}}.main:app"
+            ]
+        environment:
+            - ENV=development
+        volumes:
+            - ./{{cookiecutter.project_slug}}/:/app/{{cookiecutter.project_slug}}/
