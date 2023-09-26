@@ -1,21 +1,55 @@
-version: "3.8"
+version: "3.9"
+
+networks:
+    web:
+        driver: bridge
+    backend:
+        driver: bridge
+        internal: true
 
 services:
+
+    caddy:
+        # see https://hub.docker.com/_/caddy
+        image: caddy:alpine
+        container_name: caddy
+        init: true
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            - caddy_data:/data
+        networks:
+            - web
+            - backend
+        depends_on:
+            - app
+        restart: unless-stopped
 
     db:
         container_name: db
         image: postgres:alpine
         ports:
             - "${DB_PORT}:5432"
+        networks:
+            - backend
         environment:
             POSTGRES_DB: $DB_NAME
             POSTGRES_PASSWORD: $DB_PASSWORD
+        restart: unless-stopped
 
     app:
-        container_name: {{cookiecutter.project_slug}}
         image: {{cookiecutter.project_slug}}
+        container_name: {{cookiecutter.project_slug}}
+        build: .
+        init: true
         ports:
             - "5000:5000"
+        networks:
+            - backend
+        restart: unless-stopped
         depends_on:
             - db
         env_file:
@@ -23,3 +57,6 @@ services:
         environment:
             DB_HOST: db
             ENV: ${ENV:-production}
+
+volumes:
+    caddy_data:

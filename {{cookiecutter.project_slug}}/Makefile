@@ -1,8 +1,11 @@
 SHELL := /usr/bin/env bash -O globstar
 
+run:
+	docker compose up --build
+
 
 run_dev: check_env
-	@ docker compose up db -d; \
+	@ ENV=development docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build; \
 	trap 'docker compose down' INT; \
 	ENV=development poetry run ./entrypoint.sh
 
@@ -30,11 +33,7 @@ format:
 	blue .
 
 
-build:
-	docker build -t {{cookiecutter.project_slug}} .
-
-
-smoke_test: build check_env
+smoke_test: check_env
 	@ scripts/smoke_test.py
 
 
