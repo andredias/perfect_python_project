@@ -1,13 +1,7 @@
 version: "3.9"
 
-networks:
-    web:
-        driver: bridge
-    backend:
-        driver: bridge
-        internal: true
-
 services:
+
     caddy:
         # see https://hub.docker.com/_/caddy
         image: caddy:alpine
@@ -20,22 +14,17 @@ services:
         volumes:
             - ./Caddyfile:/etc/caddy/Caddyfile
             - caddy_data:/data
-        networks:
-            - web
-            - backend
         depends_on:
             - app
         restart: unless-stopped
 
     app:
-        image: {{cookiecutter.project_slug}}:latest
+        image: {{cookiecutter.project_slug}}
         container_name: {{cookiecutter.project_slug}}
         build: .
         init: true
         ports:
             - "5000:5000"
-        networks:
-            - backend
         restart: unless-stopped
         environment:
             ENV: ${ENV:-production}

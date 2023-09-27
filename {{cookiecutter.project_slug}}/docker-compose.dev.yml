@@ -10,7 +10,7 @@ services:
                 "--root-path=/api",
                 "{{cookiecutter.project_slug}}.main:app"
             ]
-        environment:
-            - ENV=development
         volumes:
             - ./{{cookiecutter.project_slug}}/:/app/{{cookiecutter.project_slug}}/
+        environment:
+            - ENV=development
