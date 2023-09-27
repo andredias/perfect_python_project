@@ -1,12 +1,5 @@
 version: "3.9"
 
-networks:
-    web:
-        driver: bridge
-    backend:
-        driver: bridge
-        internal: true
-
 services:
 
     caddy:
@@ -21,9 +14,6 @@ services:
         volumes:
             - ./Caddyfile:/etc/caddy/Caddyfile
             - caddy_data:/data
-        networks:
-            - web
-            - backend
         depends_on:
             - app
         restart: unless-stopped
@@ -32,9 +22,7 @@ services:
         container_name: db
         image: postgres:alpine
         ports:
-            - "${DB_PORT}:5432"
-        networks:
-            - backend
+            - "5432:5432"
         environment:
             POSTGRES_DB: $DB_NAME
             POSTGRES_PASSWORD: $DB_PASSWORD
@@ -47,8 +35,6 @@ services:
         init: true
         ports:
             - "5000:5000"
-        networks:
-            - backend
         restart: unless-stopped
         depends_on:
             - db

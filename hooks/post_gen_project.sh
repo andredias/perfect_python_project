@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xeuo pipefail
+
 cp sample.env .env
 rm alembic/versions/empty.txt  # empty.txt was used to keep the alembic folder in version control
 poetry env use {{cookiecutter.python_version}}
@@ -31,7 +33,7 @@ make install_hooks
 
 # initial migration for alembic
 docker compose up -d db
-sleep 1
+sleep 3
 poetry run alembic revision --autogenerate -m "Initial migration"
 docker compose down
 
