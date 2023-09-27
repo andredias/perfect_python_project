@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-set -xeuo pipefail
+set -xuo pipefail
 
 cp sample.env .env
 rm alembic/versions/empty.txt  # empty.txt was used to keep the alembic folder in version control
 poetry env use {{cookiecutter.python_version}}
-poetry update
+poetry lock --no-update
+poetry install
 poetry run make format
 
 commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/fastapi-complete"
@@ -33,7 +34,7 @@ make install_hooks
 
 # initial migration for alembic
 docker compose up -d db
-sleep 3
+sleep 5
 poetry run alembic revision --autogenerate -m "Initial migration"
 docker compose down
 
