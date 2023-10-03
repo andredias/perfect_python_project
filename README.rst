@@ -4,7 +4,10 @@ FastAPI Minimum Project Template
 This project template creates the basic structure for a minimum FastAPI application.
 It extends the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
 
-The template design and structure is described in the article `Minimal Project in FastAPI <https://blog.pronus.io/en/posts/python/minimal-fastapi-project/>`_.
+The template design and structure is described in these articles:
+
+#. `Minimal Project in FastAPI <https://blog.pronus.io/en/posts/python/minimal-fastapi-project/>`_.
+#. `Packaging and Distribution of the Minimal FastAPI Project <https://blog.pronus.io/en/posts/python/fastapi/packaging-and-distribution-of-the-minimal-fastapi-project/>`_
 
 
 Features
@@ -24,6 +27,7 @@ Features
 
 * Logging based on Loguru_
 * Configurable from a ``.env`` file when it is present while remaining configurable via the environment (python-dotenv_)
+* Production ready distribution and deployment via Docker containers and Docker Compose
 
 
 Instructions
