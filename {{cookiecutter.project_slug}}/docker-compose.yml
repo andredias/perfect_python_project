@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
     caddy:
@@ -17,6 +15,8 @@ services:
         depends_on:
             - app
         restart: unless-stopped
+        environment:
+            - DOMAIN
 
     app:
         image: {{cookiecutter.project_slug}}
