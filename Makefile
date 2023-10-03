@@ -10,6 +10,7 @@ test:
 	@echo -n "default_context:\n\
     author: \"Fulano de Tal\"\n\
     email: \"fulano@email.com\"\n\
+    project_name: \"$(TARGET_NAME)\"\n\
     project_slug: \"$(TARGET_NAME)\"\n\
     python_version: \"$(PYTHON_VERSION)\"\n\
     line_length: 100\n\

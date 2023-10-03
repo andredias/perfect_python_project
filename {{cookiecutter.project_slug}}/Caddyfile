@@ -1,8 +1,8 @@
-localhost {
+{$DOMAIN:localhost} {
     handle_path /api* {
         reverse_proxy h2c://app:5000
     }
     handle {
-        redir https://localhost/api/docs
+        redir https://{host}/api/docs
     }
 }
