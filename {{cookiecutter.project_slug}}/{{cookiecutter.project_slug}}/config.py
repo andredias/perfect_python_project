@@ -15,3 +15,4 @@ TESTING: bool = ENV == 'testing'
 
 os.environ['LOGURU_LEVEL'] = os.getenv('LOG_LEVEL') or (DEBUG and 'DEBUG') or 'INFO'
 os.environ['LOGURU_DEBUG_COLOR'] = '<fg #777>'
+LOG_JSON_FORMAT = os.getenv('LOG_JSON_FORMAT', 'false').lower() in {'true', '1', 'yes'}

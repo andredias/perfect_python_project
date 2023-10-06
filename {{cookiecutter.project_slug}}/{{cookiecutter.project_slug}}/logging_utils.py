@@ -1,6 +1,9 @@
+import json
 import sys
 
 from loguru import logger
+
+from . import config
 
 
 LOGURU_FORMAT_PARTS = [
@@ -25,6 +28,23 @@ def formatter(record: dict) -> str:
     )  # ref: https://loguru.readthedocs.io/en/stable/api/logger.html#message
 {% endraw %}
 
+
+def serialize(record: dict) -> str:
+    subset = {
+        'time': record['time'].isoformat(),
+        'level': record['level'].name,
+        'message': record['message'],
+        'source': f'{record["file"].name}:{record["function"]}:{record["line"]}',
+        'exception': record['exception'],
+    }
+    subset.update(record['extra'])
+    return json.dumps(subset)
+
+
 def init_loguru() -> None:
     logger.remove()
-    logger.add(sys.stderr, format=formatter)  # type: ignore
+    if config.LOG_JSON_FORMAT:
+        # https://loguru.readthedocs.io/en/stable/resources/recipes.html#serializing-log-messages-using-a-custom-function
+        logger.add(lambda message: print(serialize(message.record), file=sys.stderr))  # type: ignore
+    else:
+        logger.add(sys.stderr, format=formatter)  # type: ignore

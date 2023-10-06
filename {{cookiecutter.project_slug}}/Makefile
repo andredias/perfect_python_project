@@ -1,11 +1,11 @@
 SHELL := /usr/bin/env bash -O globstar
 
 
-run:
+run: check_env
 	docker compose up --build
 
 
-run_dev:
+run_dev: check_env
 	ENV=development docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 
@@ -30,7 +30,7 @@ format:
 	blue .
 
 
-smoke_test:
+smoke_test: check_env
 	trap 'docker compose down' EXIT; \
 	docker compose up --build -d; \
 	sleep 4; \
@@ -41,3 +41,7 @@ smoke_test:
 
 install_hooks:
 	@ scripts/install_hooks.sh
+
+
+check_env:
+	@ if [ ! -f ".env" ]; then cp sample.env .env; fi
