@@ -5,6 +5,7 @@ from loguru import logger
 from fastapi import FastAPI
 
 from . import config
+from .logging_utils import init_loguru
 
 
 @asynccontextmanager
@@ -17,6 +18,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator:  # noqa: ARG001
 
 
 async def startup() -> None:
+    init_loguru()
     show_config()
     # insert here calls to connect to database and other services
     logger.info('started...')
