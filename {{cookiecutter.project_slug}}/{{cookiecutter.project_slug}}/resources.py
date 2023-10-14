@@ -31,4 +31,4 @@ async def shutdown() -> None:
 
 def show_config() -> None:
     config_vars = {key: getattr(config, key) for key in sorted(dir(config)) if key.isupper()}
-    logger.debug(config_vars)
+    logger.debug('config vars', **config_vars)

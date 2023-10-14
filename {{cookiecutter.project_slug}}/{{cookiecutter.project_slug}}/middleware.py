@@ -11,13 +11,12 @@ from . import config
 
 async def log_request_middleware(request: Request, call_next: Callable) -> Response:
     """
-    This middleware will log all requests and their processing time.
+    Uniquely identify each request and logs its processing time.
     """
-    # Create a request ID
+    start_time = time()
     request_id: str = token_urlsafe(config.REQUEST_ID_LENGTH)
 
-    # Add context to all loggers in all views
-    start_time = time()
+    # keep the same request_id in the context of all subsequent calls to logger
     with logger.contextualize(request_id=request_id):
         response = await call_next(request)
         final_time = time()
