@@ -1,6 +1,7 @@
 import json
 import sys
 
+import stackprinter
 from loguru import logger
 from pygments import highlight
 from pygments.formatters import Terminal256Formatter
@@ -21,7 +22,7 @@ def serialize(record: dict) -> str:
     }
     subset.update(record['extra'])
     if record['exception']:
-        subset['exception'] = record['exception']
+        subset['exception'] = stackprinter.format(record['exception'])
     if config.DEBUG:
         formatted_json = json.dumps(subset, indent=4)
         return highlight(formatted_json, lexer, formatter)

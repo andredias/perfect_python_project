@@ -15,6 +15,7 @@ loguru = "*"
 pygments = "*"
 python = "^{{cookiecutter.python_version}}"
 python-dotenv = "*"
+stackprinter = "*"
 uvloop = "*"
 
 [tool.poetry.group.dev.dependencies]

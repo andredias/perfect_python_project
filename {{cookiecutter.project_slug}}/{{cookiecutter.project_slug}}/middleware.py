@@ -3,6 +3,7 @@ from secrets import token_urlsafe
 from time import time
 
 from fastapi import Request, Response
+from fastapi.responses import JSONResponse
 from hypercorn.logging import AccessLogAtoms
 from loguru import logger
 
@@ -40,3 +41,16 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             user_agent=atoms['a'],
         )
     return response
+
+
+async def generic_exception_handler(request: Request, call_next) -> JSONResponse:
+    """
+    Ideally, it should be an exception handler for all uncaught exceptions.
+    However, it does not work as reported in this issue:
+    https://github.com/tiangolo/fastapi/discussions/8647#discussioncomment-5153245
+    """
+    try:
+        return await call_next(request)
+    except Exception:
+        logger.exception('uncaught exception')
+        return JSONResponse(content={'detail': 'Internal Server Error'}, status_code=500)
