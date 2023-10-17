@@ -32,7 +32,7 @@ async def test_json_logging(
     Test that the log is in JSON format.
     """
     with patch(
-        '{{cookiecutter.project_slug}}.logging_utils.highlight', side_effect=lambda x, y, z: x
+        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/info')
     assert response.status_code == 200
@@ -50,7 +50,7 @@ async def test_logging_422_exception(
     Test if the log contains the exception when the request is invalid.
     """
     with patch(
-        '{{cookiecutter.project_slug}}.logging_utils.highlight', side_effect=lambda x, y, z: x
+        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/divide', params={'a': 1.1, 'b': 0})
     assert response.status_code == 422
@@ -80,7 +80,7 @@ async def test_logging_500_exception(
     Test if the log contains the exception when the request is invalid.
     """
     with patch(
-        '{{cookiecutter.project_slug}}.logging_utils.highlight', side_effect=lambda x, y, z: x
+        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/divide', params={'a': 1, 'b': 0})
     assert response.status_code == 500

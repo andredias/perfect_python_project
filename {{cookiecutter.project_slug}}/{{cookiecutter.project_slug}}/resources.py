@@ -5,7 +5,7 @@ from loguru import logger
 from fastapi import FastAPI
 
 from . import config
-from .logging_utils import init_loguru
+from .logging import init_loguru
 
 
 @asynccontextmanager

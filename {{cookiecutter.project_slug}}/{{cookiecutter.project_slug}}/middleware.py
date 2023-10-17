@@ -43,7 +43,7 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
     return response
 
 
-async def generic_exception_handler(request: Request, call_next) -> JSONResponse:
+async def generic_exception_handler(request: Request, call_next: Callable) -> JSONResponse:
     """
     Ideally, it should be an exception handler for all uncaught exceptions.
     However, it does not work as reported in this issue:
