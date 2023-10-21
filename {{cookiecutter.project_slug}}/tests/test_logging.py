@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, FastAPI, HTTPException
 from httpx import AsyncClient
 from pytest import CaptureFixture, fixture
 
@@ -20,6 +20,10 @@ def app_with_logging_routes(app: FastAPI) -> FastAPI:
     @router.get('/divide')
     async def divide(a: int, b: int) -> float:
         return a / b
+
+    @router.get('/http_exception')
+    async def raise_http_exception(code: int) -> None:
+        raise HTTPException(status_code=code)
 
     app.include_router(router)
     return app
@@ -60,12 +64,21 @@ async def test_logging_422_exception(
     text = capsys.readouterr().err
     position = text.index('\n}\n{\n')
 
+    # test exception log
     exception_log = json.loads(text[: position + 2])
-    assert {'time', 'level', 'message', 'source', 'request_id', 'detail'} == set(
-        exception_log.keys()
-    )
+    assert {
+        'time',
+        'level',
+        'message',
+        'source',
+        'request_id',
+        'method',
+        'path_with_qs',
+        'detail',
+    } <= set(exception_log.keys())
     assert detail == exception_log['detail']
 
+    # test request_log
     request_log = json.loads(text[position + 3 :])
     assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(
         request_log.keys()
@@ -86,17 +99,20 @@ async def test_logging_500_exception(
     assert response.status_code == 500
     assert response.json()['detail'] == 'Internal Server Error'
 
-    # there must be 2 log entries: 1 for the exception and 1 for the request
-    text = capsys.readouterr().err
-    position = text.index('\n}\n{\n')
+    log = json.loads(capsys.readouterr().err)
+    assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed', 'exception'} <= set(log.keys())
+    assert log['level'] == 'ERROR'
 
-    exception_log = json.loads(text[: position + 2])
-    assert {'time', 'level', 'message', 'source', 'request_id', 'exception'} == set(
-        exception_log.keys()
-    )
 
-    request_log = json.loads(text[position + 3 :])
-    assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(
-        request_log.keys()
-    )
-    assert 'exception' not in request_log
+async def test_logging_http_exception(app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
+) -> None:
+    for code in (400, 401, 403, 404, 409):
+        with patch(
+            '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
+        ):  # prevents highlighting
+            response = await client.get('/test_logging/http_exception', params={'code': code})
+        assert response.status_code == code
+        log = json.loads(capsys.readouterr().err)
+        assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(log.keys())
+        assert log['level'] == 'INFO'
+        assert 'exception' not in log

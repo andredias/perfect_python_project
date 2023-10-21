@@ -16,10 +16,15 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
     """
     start_time = time()
     request_id: str = token_urlsafe(config.REQUEST_ID_LENGTH)
+    exception = None
 
     # keep the same request_id in the context of all subsequent calls to logger
     with logger.contextualize(request_id=request_id):
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            exception = exc
+            response = JSONResponse(content={'detail': 'Internal Server Error'}, status_code=500)
         final_time = time()
         elapsed = final_time - start_time
         response_dict = {
@@ -27,8 +32,7 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             'headers': response.headers.raw,
         }
         atoms = AccessLogAtoms(request, response_dict, final_time)  # type: ignore
-        logger.info(
-            'log request',
+        data = dict(
             client=atoms['h'],
             schema=atoms['S'],
             protocol=atoms['H'],
@@ -40,17 +44,10 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             referer=atoms['f'],
             user_agent=atoms['a'],
         )
+        if not exception:
+            logger.info('log request', **data)
+        else:
+            logger.opt(exception=exception).error('unhandled exception', **data)
+    response.headers['X-Request-ID'] = request_id
+    response.headers['X-Processed-Time'] = str(elapsed)
     return response
-
-
-async def generic_exception_handler(request: Request, call_next: Callable) -> JSONResponse:
-    """
-    Ideally, it should be an exception handler for all uncaught exceptions.
-    However, it does not work as reported in this issue:
-    https://github.com/tiangolo/fastapi/discussions/8647#discussioncomment-5153245
-    """
-    try:
-        return await call_next(request)
-    except Exception:
-        logger.exception('uncaught exception')
-        return JSONResponse(content={'detail': 'Internal Server Error'}, status_code=500)
