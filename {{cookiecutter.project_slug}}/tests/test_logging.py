@@ -1,7 +1,7 @@
 import json
 from unittest.mock import patch
 
-from fastapi import APIRouter, FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, HTTPException, status
 from httpx import AsyncClient
 from pytest import CaptureFixture, fixture
 
@@ -39,7 +39,7 @@ async def test_json_logging(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/info')
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'message': 'info'}
 
     log = json.loads(capsys.readouterr().err)
@@ -57,7 +57,7 @@ async def test_logging_422_exception(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/divide', params={'a': 1.1, 'b': 0})
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     detail = response.json()['detail']
 
     # there must be 2 log entries: 1 for the exception and 1 for the request
@@ -96,7 +96,7 @@ async def test_logging_500_exception(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/divide', params={'a': 1, 'b': 0})
-    assert response.status_code == 500
+    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.json()['detail'] == 'Internal Server Error'
 
     log = json.loads(capsys.readouterr().err)
@@ -106,7 +106,15 @@ async def test_logging_500_exception(
 
 async def test_logging_http_exception(app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
 ) -> None:
-    for code in (400, 401, 403, 404, 409):
+    for code in (
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_403_FORBIDDEN,
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_405_METHOD_NOT_ALLOWED,
+        status.HTTP_409_CONFLICT,
+        status.HTTP_429_TOO_MANY_REQUESTS,
+    ):
         with patch(
             '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
         ):  # prevents highlighting
