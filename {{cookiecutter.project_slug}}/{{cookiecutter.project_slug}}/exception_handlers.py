@@ -1,4 +1,3 @@
-
 from fastapi import Request
 from fastapi.exception_handlers import (
     request_validation_exception_handler as _request_validation_exception_handler,
@@ -15,5 +14,8 @@ async def request_validation_exception_handler(
     This is a wrapper to the default RequestValidationException handler of FastAPI
     that logs the exception for easier debugging.
     """
-    logger.info('request validation exception', detail=exc.errors())
+    method = request.get('method', 'GET')
+    query_string = request['query_string'].decode()
+    path_with_qs = request['path'] + ('?' + query_string if query_string else '')
+    logger.info('request validation exception', method=method, path_with_qs=path_with_qs, detail=exc.errors())
     return await _request_validation_exception_handler(request, exc)
