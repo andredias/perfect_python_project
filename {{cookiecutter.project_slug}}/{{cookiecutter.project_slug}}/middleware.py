@@ -3,7 +3,7 @@ from secrets import token_urlsafe
 from time import time
 
 from fastapi import Request, Response
-from fastapi.responses import JSONResponse
+from fastapi.responses import PlainTextResponse
 from hypercorn.logging import AccessLogAtoms
 from loguru import logger
 
@@ -24,7 +24,7 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             response = await call_next(request)
         except Exception as exc:
             exception = exc
-            response = JSONResponse(content={'detail': 'Internal Server Error'}, status_code=500)
+            response = PlainTextResponse('Internal Server Error', status_code=500)
         final_time = time()
         elapsed = final_time - start_time
         response_dict = {
@@ -47,7 +47,7 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
         if not exception:
             logger.info('log request', **data)
         else:
-            logger.opt(exception=exception).error('unhandled exception', **data)
+            logger.opt(exception=exception).error('Unhandled exception', **data)
     response.headers['X-Request-ID'] = request_id
     response.headers['X-Processed-Time'] = str(elapsed)
     return response

@@ -15,7 +15,7 @@ formatter = Terminal256Formatter(style=config.PYGMENTS_STYLE)
 
 def serialize(record: dict) -> str:
     subset = {
-        'time': record['time'].isoformat(),
+        'timestamp': record['time'].isoformat(),
         'level': record['level'].name,
         'message': record['message'],
         'source': f'{record["file"].name}:{record["function"]}:{record["line"]}',

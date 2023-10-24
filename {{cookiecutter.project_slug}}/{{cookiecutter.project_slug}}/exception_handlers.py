@@ -16,6 +16,6 @@ async def request_validation_exception_handler(
     """
     method = request.get('method', 'GET')
     query_string = request['query_string'].decode()
-    path_with_qs = request['path'] + ('?' + query_string if query_string else '')
-    logger.info('request validation exception', method=method, path_with_qs=path_with_qs, detail=exc.errors())
+    path_with_query = request['path'] + ('?' + query_string if query_string else '')
+    logger.info('request validation exception', method=method, path_with_query=path_with_query, detail=exc.errors())
     return await _request_validation_exception_handler(request, exc)

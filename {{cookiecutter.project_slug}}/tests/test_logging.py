@@ -5,6 +5,19 @@ from fastapi import APIRouter, FastAPI, HTTPException, status
 from httpx import AsyncClient
 from pytest import CaptureFixture, fixture
 
+basic_log_fields = {
+    'timestamp',
+    'level',
+    'message',
+    'source',
+    'request_id',
+    'method',
+    'path_with_query',
+}
+failed_validation_log_fields = basic_log_fields | {'detail'}
+request_log_fields = basic_log_fields | {'protocol', 'schema', 'elapsed', 'status_code'}
+exception_log_fields = request_log_fields | {'exception'}
+
 
 @fixture
 def app_with_logging_routes(app: FastAPI) -> FastAPI:
@@ -14,8 +27,8 @@ def app_with_logging_routes(app: FastAPI) -> FastAPI:
     router = APIRouter(prefix='/test_logging')
 
     @router.get('/info')
-    async def info() -> dict[str, str]:
-        return {'message': 'info'}
+    async def info() -> dict[str, int]:
+        return {'data': 1234}
 
     @router.get('/divide')
     async def divide(a: int, b: int) -> float:
@@ -40,10 +53,11 @@ async def test_json_logging(
     ):  # prevents highlighting
         response = await client.get('/test_logging/info')
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {'message': 'info'}
+    assert response.json() == {'data': 1234}
 
     log = json.loads(capsys.readouterr().err)
-    assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(log.keys())
+    assert request_log_fields <= set(log.keys())
+    assert log['level'] == 'INFO'
     assert 'exception' not in log
 
 
@@ -64,25 +78,17 @@ async def test_logging_422_exception(
     text = capsys.readouterr().err
     position = text.index('\n}\n{\n')
 
-    # test exception log
-    exception_log = json.loads(text[: position + 2])
-    assert {
-        'time',
-        'level',
-        'message',
-        'source',
-        'request_id',
-        'method',
-        'path_with_qs',
-        'detail',
-    } <= set(exception_log.keys())
-    assert detail == exception_log['detail']
+    # test validation log
+    validation_log = json.loads(text[: position + 2])
+    assert failed_validation_log_fields <= set(validation_log.keys())
+    assert 'exception' not in validation_log
+    assert validation_log['level'] == 'INFO'
+    assert detail == validation_log['detail']
 
     # test request_log
     request_log = json.loads(text[position + 3 :])
-    assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(
-        request_log.keys()
-    )
+    assert request_log_fields <= set(request_log.keys())
+    assert request_log['level'] == 'INFO'
     assert 'exception' not in request_log
 
 
@@ -90,17 +96,17 @@ async def test_logging_500_exception(
     app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
 ) -> None:
     """
-    Test if the log contains the exception when the request is invalid.
+    Test the log message of a unhandled exception.
     """
     with patch(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
         response = await client.get('/test_logging/divide', params={'a': 1, 'b': 0})
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-    assert response.json()['detail'] == 'Internal Server Error'
+    assert response.text == 'Internal Server Error'
 
     log = json.loads(capsys.readouterr().err)
-    assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed', 'exception'} <= set(log.keys())
+    assert exception_log_fields <= set(log.keys())
     assert log['level'] == 'ERROR'
 
 
@@ -121,6 +127,6 @@ async def test_logging_http_exception(app_with_logging_routes: FastAPI, client: 
             response = await client.get('/test_logging/http_exception', params={'code': code})
         assert response.status_code == code
         log = json.loads(capsys.readouterr().err)
-        assert {'time', 'level', 'message', 'source', 'request_id', 'elapsed'} <= set(log.keys())
-        assert log['level'] == 'INFO'
+        assert request_log_fields <= set(log.keys())
         assert 'exception' not in log
+        assert log['level'] == 'INFO'
