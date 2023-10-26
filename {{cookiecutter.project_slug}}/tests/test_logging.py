@@ -1,4 +1,5 @@
 import json
+from typing import AsyncIterable
 from unittest.mock import patch
 
 from fastapi import APIRouter, FastAPI, HTTPException, status
@@ -19,12 +20,20 @@ request_log_fields = basic_log_fields | {'protocol', 'schema', 'elapsed', 'statu
 exception_log_fields = request_log_fields | {'exception'}
 
 
-@fixture
-def app_with_logging_routes(app: FastAPI) -> FastAPI:
+@fixture(scope='module')
+async def logging_client() -> AsyncIterable[AsyncClient]:
     """
     Modify the app to include some routes for testing logging.
     """
-    router = APIRouter(prefix='/test_logging')
+    from {{cookiecutter.project_slug}}.logging import init_loguru
+    from {{cookiecutter.project_slug}}.main import (
+        BaseHTTPMiddleware,
+        RequestValidationError,
+        log_request_middleware,
+        request_validation_exception_handler,
+    )
+
+    router = APIRouter()
 
     @router.get('/info')
     async def info() -> dict[str, int]:
@@ -38,12 +47,21 @@ def app_with_logging_routes(app: FastAPI) -> FastAPI:
     async def raise_http_exception(code: int) -> None:
         raise HTTPException(status_code=code)
 
+    app = FastAPI()
     app.include_router(router)
-    return app
+    app.add_middleware(BaseHTTPMiddleware, dispatch=log_request_middleware)
+    app.add_exception_handler(RequestValidationError, request_validation_exception_handler)
+
+    init_loguru()
+
+    async with AsyncClient(app=app, base_url='http://test_logging') as client:
+        yield client
+
+    return
 
 
 async def test_json_logging(
-    app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
+    logging_client: AsyncClient, capsys: CaptureFixture
 ) -> None:
     """
     Test that the log is in JSON format.
@@ -51,7 +69,7 @@ async def test_json_logging(
     with patch(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
-        response = await client.get('/test_logging/info')
+        response = await logging_client.get('/info')
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'data': 1234}
 
@@ -62,7 +80,7 @@ async def test_json_logging(
 
 
 async def test_logging_422_exception(
-    app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
+    logging_client: AsyncClient, capsys: CaptureFixture
 ) -> None:
     """
     Test if the log contains the exception when the request is invalid.
@@ -70,7 +88,7 @@ async def test_logging_422_exception(
     with patch(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
-        response = await client.get('/test_logging/divide', params={'a': 1.1, 'b': 0})
+        response = await logging_client.get('/divide', params={'a': 1.1, 'b': 0})
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     detail = response.json()['detail']
 
@@ -93,7 +111,7 @@ async def test_logging_422_exception(
 
 
 async def test_logging_500_exception(
-    app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
+    logging_client: AsyncClient, capsys: CaptureFixture
 ) -> None:
     """
     Test the log message of a unhandled exception.
@@ -101,7 +119,7 @@ async def test_logging_500_exception(
     with patch(
         '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
     ):  # prevents highlighting
-        response = await client.get('/test_logging/divide', params={'a': 1, 'b': 0})
+        response = await logging_client.get('/divide', params={'a': 1, 'b': 0})
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.text == 'Internal Server Error'
 
@@ -110,7 +128,7 @@ async def test_logging_500_exception(
     assert log['level'] == 'ERROR'
 
 
-async def test_logging_http_exception(app_with_logging_routes: FastAPI, client: AsyncClient, capsys: CaptureFixture
+async def test_logging_http_exception(logging_client: AsyncClient, capsys: CaptureFixture
 ) -> None:
     for code in (
         status.HTTP_400_BAD_REQUEST,
@@ -124,7 +142,7 @@ async def test_logging_http_exception(app_with_logging_routes: FastAPI, client: 
         with patch(
             '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
         ):  # prevents highlighting
-            response = await client.get('/test_logging/http_exception', params={'code': code})
+            response = await logging_client.get('/http_exception', params={'code': code})
         assert response.status_code == code
         log = json.loads(capsys.readouterr().err)
         assert request_log_fields <= set(log.keys())
