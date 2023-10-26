@@ -24,9 +24,9 @@ def serialize(record: dict) -> str:
     if record['exception']:
         subset['exception'] = stackprinter.format(record['exception'])
     if config.DEBUG:
-        formatted_json = json.dumps(subset, indent=4)
+        formatted_json = json.dumps(subset, indent=4, default=str)
         return highlight(formatted_json, lexer, formatter)
-    return json.dumps(subset)
+    return json.dumps(subset, default=str)
 
 
 def init_loguru() -> None:
