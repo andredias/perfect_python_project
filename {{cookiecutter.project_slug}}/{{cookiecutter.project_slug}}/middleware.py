@@ -32,6 +32,10 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             'headers': response.headers.raw,
         }
         atoms = AccessLogAtoms(request, response_dict, final_time)  # type: ignore
+        try:
+            response_length = int(atoms['B'])
+        except ValueError:
+            response_length = 0
         data = dict(
             client=atoms['h'],
             schema=atoms['S'],
@@ -39,7 +43,7 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             method=atoms['m'],
             path_with_query=atoms['Uq'],
             status_code=response.status_code,
-            response_length=atoms['b'],
+            response_length=response_length,
             elapsed=elapsed,
             referer=atoms['f'],
             user_agent=atoms['a'],
