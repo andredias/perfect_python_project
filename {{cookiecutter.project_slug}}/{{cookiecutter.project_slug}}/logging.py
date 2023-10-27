@@ -1,6 +1,6 @@
-import json
 import sys
 
+import orjson
 import stackprinter
 from loguru import logger
 from pygments import highlight
@@ -11,6 +11,9 @@ from . import config
 
 lexer = JsonLexer()
 formatter = Terminal256Formatter(style=config.PYGMENTS_STYLE)
+orjson_options = orjson.OPT_NAIVE_UTC
+if config.DEBUG:
+    orjson_options |= orjson.OPT_INDENT_2
 
 
 def serialize(record: dict) -> str:
@@ -23,10 +26,10 @@ def serialize(record: dict) -> str:
     subset.update(record['extra'])
     if record['exception']:
         subset['exception'] = stackprinter.format(record['exception'])
+    formatted_json = orjson.dumps(subset, default=str, option=orjson_options).decode()
     if config.DEBUG:
-        formatted_json = json.dumps(subset, indent=4, default=str)
-        return highlight(formatted_json, lexer, formatter)
-    return json.dumps(subset, default=str)
+        formatted_json = highlight(formatted_json, lexer, formatter)
+    return formatted_json
 
 
 def init_loguru() -> None:
