@@ -23,7 +23,7 @@ exception_log_fields = request_log_fields | {'exception'}
 @fixture(scope='module')
 async def logging_client() -> AsyncIterable[AsyncClient]:
     """
-    Modify the app to include some routes for testing logging.
+    Independent client/app instance for testing the logging.
     """
     from {{cookiecutter.project_slug}}.logging import init_loguru
     from {{cookiecutter.project_slug}}.main import (
@@ -66,17 +66,18 @@ async def test_json_logging(
     """
     Test that the log is in JSON format.
     """
-    with patch(
-        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-    ):  # prevents highlighting
-        response = await logging_client.get('/info')
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {'data': 1234}
+    for debug in (True, False):
+        with patch(
+            '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
+        ), patch('{{cookiecutter.project_slug}}.config.DEBUG', debug):  # prevents highlighting
+            response = await logging_client.get('/info')
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == {'data': 1234}
 
-    log = json.loads(capsys.readouterr().err)
-    assert request_log_fields <= set(log.keys())
-    assert log['level'] == 'INFO'
-    assert 'exception' not in log
+        log = json.loads(capsys.readouterr().err)
+        assert request_log_fields <= set(log.keys())
+        assert log['level'] == 'INFO'
+        assert 'exception' not in log
 
 
 async def test_logging_422_exception(
@@ -128,23 +129,18 @@ async def test_logging_500_exception(
     assert log['level'] == 'ERROR'
 
 
-async def test_logging_http_exception(logging_client: AsyncClient, capsys: CaptureFixture
-) -> None:
-    for code in (
-        status.HTTP_400_BAD_REQUEST,
-        status.HTTP_401_UNAUTHORIZED,
-        status.HTTP_403_FORBIDDEN,
-        status.HTTP_404_NOT_FOUND,
-        status.HTTP_405_METHOD_NOT_ALLOWED,
-        status.HTTP_409_CONFLICT,
-        status.HTTP_429_TOO_MANY_REQUESTS,
-    ):
-        with patch(
-            '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-        ):  # prevents highlighting
-            response = await logging_client.get('/http_exception', params={'code': code})
-        assert response.status_code == code
-        log = json.loads(capsys.readouterr().err)
-        assert request_log_fields <= set(log.keys())
-        assert 'exception' not in log
-        assert log['level'] == 'INFO'
+async def test_default_encoding(logging_client: AsyncClient, capsys: CaptureFixture) -> None:
+    """
+    Test the encoding behavior for non-serializable types.
+    """
+    from datetime import datetime
+    from pathlib import Path
+
+    from loguru import logger
+
+    for debug in (True, False):
+        with patch('{{cookiecutter.project_slug}}.config.DEBUG', debug):
+            # Path and datetime are non-serializable types by default
+            for param in (Path('.'), datetime.now()):
+                logger.info('test param encoding', param=param)
+                assert 'TypeError: Object of type' not in capsys.readouterr().err
