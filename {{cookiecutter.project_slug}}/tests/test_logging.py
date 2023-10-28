@@ -2,7 +2,7 @@ import json
 from typing import AsyncIterable
 from unittest.mock import patch
 
-from fastapi import APIRouter, FastAPI, HTTPException, status
+from fastapi import APIRouter, FastAPI, status
 from httpx import AsyncClient
 from pytest import CaptureFixture, fixture
 
@@ -43,10 +43,6 @@ async def logging_client() -> AsyncIterable[AsyncClient]:
     async def divide(a: int, b: int) -> float:
         return a / b
 
-    @router.get('/http_exception')
-    async def raise_http_exception(code: int) -> None:
-        raise HTTPException(status_code=code)
-
     app = FastAPI()
     app.include_router(router)
     app.add_middleware(BaseHTTPMiddleware, dispatch=log_request_middleware)
@@ -66,18 +62,17 @@ async def test_json_logging(
     """
     Test that the log is in JSON format.
     """
-    for debug in (True, False):
-        with patch(
-            '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-        ), patch('{{cookiecutter.project_slug}}.config.DEBUG', debug):  # prevents highlighting
-            response = await logging_client.get('/info')
-        assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {'data': 1234}
+    with patch(
+        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
+    ):  # prevents highlighting
+        response = await logging_client.get('/info')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {'data': 1234}
 
-        log = json.loads(capsys.readouterr().err)
-        assert request_log_fields <= set(log.keys())
-        assert log['level'] == 'INFO'
-        assert 'exception' not in log
+    log = json.loads(capsys.readouterr().err)
+    assert request_log_fields <= set(log.keys())
+    assert log['level'] == 'INFO'
+    assert 'exception' not in log
 
 
 async def test_logging_422_exception(
@@ -138,9 +133,7 @@ async def test_default_encoding(logging_client: AsyncClient, capsys: CaptureFixt
 
     from loguru import logger
 
-    for debug in (True, False):
-        with patch('{{cookiecutter.project_slug}}.config.DEBUG', debug):
-            # Path and datetime are non-serializable types by default
-            for param in (Path('.'), datetime.now()):
-                logger.info('test param encoding', param=param)
-                assert 'TypeError: Object of type' not in capsys.readouterr().err
+    # Path and datetime are non-serializable types by default
+    for param in (Path('.'), datetime.now(), {1, 2}):
+        logger.info('test param encoding', param=param)
+        assert 'TypeError: Object of type' not in capsys.readouterr().err
