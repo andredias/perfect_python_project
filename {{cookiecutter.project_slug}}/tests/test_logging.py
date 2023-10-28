@@ -133,7 +133,7 @@ async def test_default_encoding(logging_client: AsyncClient, capsys: CaptureFixt
 
     from loguru import logger
 
-    # Path and datetime are non-serializable types by default
+    # Path, datetime and set are non-serializable types by default
     for param in (Path('.'), datetime.now(), {1, 2}):
         logger.info('test param encoding', param=param)
-        assert 'TypeError: Object of type' not in capsys.readouterr().err
+        assert 'TypeError:' not in capsys.readouterr().err
