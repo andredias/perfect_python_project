@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash -O globstar
 
-run:
+run: check_env
 	docker compose up --build
 
 

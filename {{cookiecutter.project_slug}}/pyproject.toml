@@ -18,9 +18,12 @@ hypercorn = "*"
 loguru = "*"
 passlib = { extras = ["argon2"], version = "*" }
 psycopg2-binary = "*"
+orjson = "*"
+pygments = "*"
 python = "^{{cookiecutter.python_version}}"
 python-dotenv = "*"
 tenacity = "*"
+stackprinter = "*"
 uvloop = "*"
 
 [tool.poetry.group.dev.dependencies]
