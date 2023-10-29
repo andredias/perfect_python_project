@@ -36,18 +36,18 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             response_length = int(atoms['B'])
         except ValueError:
             response_length = 0
-        data = dict(
-            client=atoms['h'],
-            schema=atoms['S'],
-            protocol=atoms['H'],
-            method=atoms['m'],
-            path_with_query=atoms['Uq'],
-            status_code=response.status_code,
-            response_length=response_length,
-            elapsed=elapsed,
-            referer=atoms['f'],
-            user_agent=atoms['a'],
-        )
+        data = {
+            'client': atoms['h'],
+            'schema': atoms['S'],
+            'protocol': atoms['H'],
+            'method': atoms['m'],
+            'path_with_query': atoms['Uq'],
+            'status_code': response.status_code,
+            'response_length': response_length,
+            'elapsed': elapsed,
+            'referer': atoms['f'],
+            'user_agent': atoms['a'],
+        }
         if not exception:
             logger.info('log request', **data)
         else:

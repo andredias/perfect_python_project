@@ -1,5 +1,5 @@
 import json
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 from unittest.mock import patch
 
 from fastapi import APIRouter, FastAPI, status
