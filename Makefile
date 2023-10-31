@@ -22,4 +22,5 @@ test:
 	poetry run make lint && \
 	poetry run make test && \
 	poetry run make audit && \
-	poetry run make smoke_test
+	poetry run make smoke_test && \
+	echo '\nSuccess!'
