@@ -2,11 +2,11 @@
 
 GIT_PRE_PUSH='#!/usr/bin/env bash
 cd $(git rev-parse --show-toplevel)
-poetry run make lint && poetry run make test
+poetry run make lint && poetry run make test && poetry run make audit
 '
 
 HG_HOOKS='[hooks]
-pre-push.lint_test = (cd `hg root`; poetry run make lint && poetry run make test)
+pre-push.lint_test = (cd `hg root`; poetry run make lint && poetry run make test && poetry run make audit)
 '
 
 if [ -d '.git' ]; then
