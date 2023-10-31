@@ -29,7 +29,6 @@ uvloop = "*"
 [tool.poetry.group.dev.dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
-blue = "*"
 Faker = "*"
 httpx = "*"
 mypy = "*"
@@ -37,9 +36,6 @@ pip-audit = "*"
 pytest = "*"
 pytest-cov = "*"
 ruff = "*"
-
-[tool.blue]
-line-length = {{cookiecutter.line_length}}
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning"]
@@ -74,6 +70,9 @@ select = [
 ]
 ignore = ["B008"]
 target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
+
+[tool.ruff.format]
+quote-style = "single"
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
