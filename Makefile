@@ -20,4 +20,5 @@ test:
 	cd /tmp/$(TARGET_NAME); \
 	poetry run make lint && \
 	poetry run make test && \
-	poetry run make audit
+	poetry run make audit && \
+	echo '\nSuccess!'
