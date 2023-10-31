@@ -19,6 +19,7 @@ test:
 	cookiecutter --no-input --config-file /tmp/$(TARGET_NAME).yml -o /tmp .
 
 	cd /tmp/$(TARGET_NAME); \
-	poetry run make test; \
-	poetry run make lint; \
+	poetry run make lint && \
+	poetry run make test && \
+	poetry run make audit && \
 	make smoke_test

@@ -15,19 +15,21 @@ test:
 
 
 lint:
+	ruff check --diff .
 	@echo
-	ruff .
-	@echo
-	blue --check --diff --color .
+	ruff format --diff .
 	@echo
 	mypy .
-	@echo
-	pip-audit
 
 
 format:
-	ruff --silent --exit-zero --fix .
-	blue .
+	ruff check --silent --exit-zero --fix .
+	@echo
+	ruff format .
+
+
+audit:
+	pip-audit
 
 
 smoke_test: check_env
