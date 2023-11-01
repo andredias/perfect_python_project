@@ -22,7 +22,7 @@ uvloop = "*"
 [tool.poetry.group.dev.dependencies]
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
-httpx = "*"
+httpx = {version = "*", extras = ["cli"]}
 mypy = "*"
 pip-audit = "*"
 pytest = "*"
