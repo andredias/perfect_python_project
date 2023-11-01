@@ -29,4 +29,4 @@ USER nobody
 COPY --chown=nobody:nogroup hypercorn.toml .
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
-CMD ["hypercorn", "--config=hypercorn.toml", "--root-path=/api", "{{cookiecutter.project_slug}}.main:app"]
+CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:app"]
