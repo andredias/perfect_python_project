@@ -4,10 +4,9 @@
   "project_name": "Perfect Python Project",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "python_version": "3.11",
-  "line_length": 79,
+  "line_length": 100,
   "version_control": [
     "hg",
     "git"
-  ],
-  "github_respository_url": ""
+  ]
 }
