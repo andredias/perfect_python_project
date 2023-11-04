@@ -35,6 +35,9 @@ jobs:
             - name: Linting
               run: poetry run make lint
 
+            - name: Auditing
+              run: poetry run make audit
+
             - name: Test
               run: poetry run make test
 

@@ -30,7 +30,7 @@ uvloop = "*"
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
 Faker = "*"
-httpx = "*"
+httpx = {version = "*", extras = ["cli"]}
 mypy = "*"
 pip-audit = "*"
 pytest = "*"
