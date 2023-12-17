@@ -40,6 +40,3 @@ jobs:
 
         - name: Test
           run: poetry run make test
-
-        - name: Build Docker Image
-          run: poetry run make build
