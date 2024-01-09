@@ -1,4 +1,4 @@
-TARGET_NAME := "fastapi_minimum"
+TARGET_NAME := "fastapi_htmx_minimum"
 PYTHON_VERSION := $(shell python --version | sed -r -e 's/Python //' -e 's/\.[0-9]+$$//')
 
 test:

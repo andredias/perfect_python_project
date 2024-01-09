@@ -36,7 +36,7 @@ smoke_test: check_env
 	trap 'docker compose down' EXIT; \
 	docker compose up --build -d; \
 	sleep 4; \
-	httpx https://localhost/api/hello --http2 --no-verify -v; \
+	httpx https://localhost/hello --http2 --no-verify -v; \
 	[ $$? -eq 0 ] || exit 1; \
 	echo 'Smoke test passed!'; exit 0
 

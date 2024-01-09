@@ -11,6 +11,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 fastapi = "*"
 hypercorn = "*"
+jinja2 = "*"
+jinja2-fragments = "*"
 loguru = "*"
 orjson = "*"
 pygments = "*"

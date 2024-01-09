@@ -5,7 +5,6 @@ services:
                 "hypercorn",
                 "--config=hypercorn.toml",
                 "--reload",
-                "--root-path=/api",
                 "{{cookiecutter.project_slug}}.main:app"
             ]
         volumes:

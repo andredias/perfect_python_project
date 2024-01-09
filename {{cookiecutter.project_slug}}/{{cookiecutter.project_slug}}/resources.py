@@ -1,11 +1,16 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from loguru import logger
 from fastapi import FastAPI
+from jinja2_fragments.fastapi import Jinja2Blocks as Jinja2Templates
+from loguru import logger
 
 from . import config
 from .logging import init_loguru
+
+templates = Jinja2Templates(
+    directory=config.TEMPLATE_DIR, autoescape=True, trim_blocks=True, lstrip_blocks=True
+)
 
 
 @asynccontextmanager

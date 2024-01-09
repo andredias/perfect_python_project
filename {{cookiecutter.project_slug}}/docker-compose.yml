@@ -30,13 +30,6 @@ services:
             - .env
         environment:
             ENV: ${ENV:-production}
-        command:
-            [
-                "hypercorn",
-                "--config=hypercorn.toml",
-                "--root-path=/api",
-                "{{cookiecutter.project_slug}}.main:app"
-            ]
 
 volumes:
     caddy_data:

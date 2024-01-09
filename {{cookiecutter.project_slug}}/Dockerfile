@@ -28,5 +28,7 @@ WORKDIR /app
 USER nobody
 COPY --chown=nobody:nogroup hypercorn.toml .
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
+COPY --chown=nobody:nogroup static/ ./static
+COPY --chown=nobody:nogroup templates/ ./templates
 
 CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:app"]

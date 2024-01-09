@@ -1,0 +1,29 @@
+{% raw -%}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <script src="/static/js/htmx.min.1.9.8.js"></script>
+    {% block style %}
+    {% endblock %}
+</head>
+
+<body>
+    {%- block header -%}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {%- block footer -%}
+    {% endblock %}
+
+    {%- block script -%}
+    {% endblock %}
+</body>
+
+</html>
+{% endraw -%}

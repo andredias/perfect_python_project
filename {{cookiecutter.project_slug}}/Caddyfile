@@ -1,8 +1,11 @@
 {$DOMAIN:localhost} {
-    handle_path /api* {
+    handle {
         reverse_proxy h2c://app:5000
     }
-    handle {
-        redir https://{host}/api/docs
+
+    @compress_exts {
+        not path *.gif *.jpg *.png
     }
+
+    encode @compress_exts gzip zstd
 }
