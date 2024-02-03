@@ -26,7 +26,6 @@ ENV PATH=/venv/bin:${PATH}
 
 WORKDIR /app
 USER nobody
-COPY --chown=nobody:nogroup hypercorn.toml .
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
-CMD ["hypercorn", "--config=hypercorn.toml", "{{cookiecutter.project_slug}}.main:app"]
+CMD ["hypercorn", "--worker-class=uvloop", "--bind=0.0.0.0:5000", "--error-logfile=-", "{{cookiecutter.project_slug}}.main:app"]

@@ -33,7 +33,9 @@ services:
         command:
             [
                 "hypercorn",
-                "--config=hypercorn.toml",
+                "--worker-class=uvloop",
+                "--bind=0.0.0.0:5000",
+                "--error-logfile=-",
                 "--root-path=/api",
                 "{{cookiecutter.project_slug}}.main:app"
             ]
