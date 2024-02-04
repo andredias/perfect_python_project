@@ -52,11 +52,6 @@ Answer a few questions:
     1 - hg
     2 - git
     Choose from 1, 2 (1): 1
-    worker_class (uvloop):
-
-``worker_class`` refers to the worker class used by the ``hypercorn`` server.
-The default is ``uvloop`` in ``posix`` systems and ``asyncio`` in ``nt`` systems.
-
 
 That's it!
 
