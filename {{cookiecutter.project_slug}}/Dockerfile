@@ -28,4 +28,4 @@ WORKDIR /app
 USER nobody
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
-CMD ["hypercorn", "--worker-class=uvloop", "--bind=0.0.0.0:5000", "--error-logfile=-", "{{cookiecutter.project_slug}}.main:app"]
+CMD ["hypercorn", "--worker-class={{cookiecutter.worker_class}}", "--bind=0.0.0.0:5000", "--error-logfile=-", "{{cookiecutter.project_slug}}.main:app"]

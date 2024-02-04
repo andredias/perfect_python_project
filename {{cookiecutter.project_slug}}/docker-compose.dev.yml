@@ -3,7 +3,7 @@ services:
         command:
             [
                 "hypercorn",
-                "--worker-class=uvloop",
+                "--worker-class={{ cookiecutter.worker_class }}",
                 "--bind=0.0.0.0:5000",
                 "--error-logfile=-",
                 "--reload",
