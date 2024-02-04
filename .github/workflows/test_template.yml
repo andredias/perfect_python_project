@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
 
-  lint_and_test:
+  test_template:
     runs-on: [ubuntu-latest, windows-latest, macos-latest]
     steps:
 
