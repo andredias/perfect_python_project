@@ -15,7 +15,7 @@ Features
 --------
 
 * FastAPI_ web framework
-* Python 3.11+ (configurable)
+* Python 3.12+ (configurable)
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
@@ -61,7 +61,7 @@ Answer a few questions:
     email (): fulano@email.com
     project_name (Project): Project X
     project_slug (project_x):
-    python_version (3.11):
+    python_version (3.12):
     line_length (100):
     Select version_control:
     1 - hg
