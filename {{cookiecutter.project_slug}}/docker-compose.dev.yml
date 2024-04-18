@@ -3,7 +3,9 @@ services:
         command:
             [
                 "hypercorn",
-                "--config=hypercorn.toml",
+                "--worker-class={{ cookiecutter.worker_class }}",
+                "--bind=0.0.0.0:5000",
+                "--error-logfile=-",
                 "--reload",
                 "--root-path=/api",
                 "{{cookiecutter.project_slug}}.main:app"

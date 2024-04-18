@@ -46,7 +46,8 @@ async def logging_client() -> AsyncIterable[AsyncClient]:
     app = FastAPI()
     app.include_router(router)
     app.add_middleware(BaseHTTPMiddleware, dispatch=log_request_middleware)
-    app.add_exception_handler(RequestValidationError, request_validation_exception_handler)
+    # type annotation issue. See: https://github.com/encode/starlette/pull/2403
+    app.add_exception_handler(RequestValidationError, request_validation_exception_handler)  # type: ignore
 
     init_loguru()
 

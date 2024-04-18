@@ -3,6 +3,7 @@ name = "{{cookiecutter.project_name}}"
 version = "0.1.0"
 description = ""
 authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -30,7 +31,7 @@ uvloop = "*"
 asgi-lifespan = "*"
 alt-pytest-asyncio = "*"
 Faker = "*"
-httpx = {version = "*", extras = ["cli"]}
+httpx = { version = "*", extras = ["cli"] }
 mypy = "*"
 pip-audit = "*"
 pytest = "*"
@@ -48,6 +49,9 @@ plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
+target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
+
+[tool.ruff.lint]
 select = [
     "ARG",
     "B",
@@ -69,12 +73,11 @@ select = [
     "W",
 ]
 ignore = ["B008"]
-target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
 
 [tool.ruff.format]
 quote-style = "single"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/**" = ["ARG", "PLR2004", "S"]
 "smoke_test.py" = ["S"]

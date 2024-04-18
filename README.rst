@@ -2,12 +2,13 @@ FastAPI Project Template
 ========================
 
 This project template creates the basic structure for a minimum FastAPI application.
-It extends the `Perfect Python Project <https://github.com/andredias/perfect_python_project>`_ template.
+It extends the `Perfect Python Project <https://github.com/andredias/perfect_python_project/tree/master>`_ template.
 
 The template design and structure is described in these articles:
 
-#. `Minimal Project in FastAPI <https://blog.pronus.io/en/posts/python/minimal-fastapi-project/>`_.
-#. `Packaging and Distribution of the Minimal FastAPI Project <https://blog.pronus.io/en/posts/python/fastapi/packaging-and-distribution-of-the-minimal-fastapi-project/>`_
+#. `Minimal Project in FastAPI <https://blog.pronus.xyz/en/posts/python/minimal-fastapi-project/>`_.
+#. `Packaging and Distribution of the Minimal FastAPI Project <https://blog.pronus.xyz/en/posts/python/fastapi/packaging-and-distribution-of-the-minimal-fastapi-project/>`_
+
 
 
 Features
@@ -15,11 +16,11 @@ Features
 
 * FastAPI_ web framework
 * Asynchronous database support based on `Encode Databases`_ and `SQLAlchemy Core`_
-* Python 3.11+ (configurable)
+* Python 3.12+ (configurable)
 * Poetry_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
-* Linting based on ruff_, blue_, mypy_ and others
+* Linting based on ruff_, mypy_ and others
 * Tests:
 
     * Tests based on pytest_
@@ -34,7 +35,7 @@ Features
 Instructions
 ============
 
-To instantiate the template into a new project, you'll need cookiecutter_.
+To instantiate the template into a new project, you'll need cookiecutter_ (>=2.4.0).
 The best way to use it just once is through pipx_:
 
 .. code:: console
@@ -57,17 +58,20 @@ Answer a few questions:
 
 .. code:: text
 
-    author []: Fulano de Tal
-    email []: fulano@email.com
-    project_name [Project]: Project X
-    project_slug [project_x]:
-    python_version [3.11]:
-    line_length [79]: 100
+    author (): Fulano de Tal
+    email (): fulano@email.com
+    project_name (Project): Project X
+    project_slug (project_x):
+    python_version (3.12):
+    line_length (100):
     Select version_control:
     1 - hg
     2 - git
-    Choose from 1, 2 [1]: 1
-    github_respository_url []:
+    Choose from 1, 2 (1):
+    worker_class (uvloop):
+
+``worker_class`` refers to the worker class used by the ``hypercorn`` server.
+The default is ``uvloop`` in ``posix`` systems and ``asyncio`` in ``nt`` systems.
 
 
 That's it!
@@ -75,7 +79,6 @@ That's it!
 
 .. _alt-pytest-asyncio: https://pypi.org/project/alt-pytest-asyncio/
 .. _asgi-lifespan: https://pypi.org/project/asgi-lifespan/
-.. _blue: https://pypi.org/project/blue/
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
 .. _Encode Databases: https://www.encode.io/databases/
 .. _FastAPI: https://fastapi.tiangolo.com/

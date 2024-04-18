@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN python -m venv /venv
 
-ENV POETRY_VERSION=1.5.1
+ENV POETRY_VERSION=1.8.2
 ENV POETRY_HOME=/opt/poetry
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://install.python-poetry.org | python -
@@ -28,8 +28,6 @@ ENV PATH=/venv/bin:${PATH}
 
 WORKDIR /app
 USER nobody
-COPY --chown=nobody:nogroup entrypoint.sh migrate_database.py hypercorn.toml alembic.ini ./
-COPY --chown=nobody:nogroup alembic/ ./alembic
 COPY --chown=nobody:nogroup {{cookiecutter.project_slug}}/ ./{{cookiecutter.project_slug}}
 
 CMD ["./entrypoint.sh"]

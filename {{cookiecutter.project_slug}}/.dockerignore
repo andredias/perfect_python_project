@@ -4,6 +4,5 @@
 !migrate_database.py
 !pyproject.toml
 !poetry.lock
-!hypercorn.toml
 !{{cookiecutter.project_slug}}/
 **/__pycache__
