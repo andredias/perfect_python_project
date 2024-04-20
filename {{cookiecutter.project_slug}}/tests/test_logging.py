@@ -1,6 +1,5 @@
 import json
 from collections.abc import AsyncIterable
-from unittest.mock import patch
 
 from fastapi import APIRouter, FastAPI, status
 from httpx import AsyncClient
@@ -63,10 +62,7 @@ async def test_json_logging(
     """
     Test that the log is in JSON format.
     """
-    with patch(
-        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-    ):  # prevents highlighting
-        response = await logging_client.get('/info')
+    response = await logging_client.get('/info')
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'data': 1234}
 
@@ -82,26 +78,23 @@ async def test_logging_422_exception(
     """
     Test if the log contains the exception when the request is invalid.
     """
-    with patch(
-        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-    ):  # prevents highlighting
-        response = await logging_client.get('/divide', params={'a': 1.1, 'b': 0})
+    response = await logging_client.get('/divide', params={'a': 1.1, 'b': 0})
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     detail = response.json()['detail']
 
     # there must be 2 log entries: 1 for the exception and 1 for the request
     text = capsys.readouterr().err
-    position = text.index('\n}\n{\n')
+    logs = text.split('\n')
 
     # test validation log
-    validation_log = json.loads(text[: position + 2])
+    validation_log = json.loads(logs[0])
     assert failed_validation_log_fields <= set(validation_log.keys())
     assert 'exception' not in validation_log
     assert validation_log['level'] == 'INFO'
     assert detail == validation_log['detail']
 
     # test request_log
-    request_log = json.loads(text[position + 3 :])
+    request_log = json.loads(logs[1])
     assert request_log_fields <= set(request_log.keys())
     assert request_log['level'] == 'INFO'
     assert 'exception' not in request_log
@@ -113,10 +106,7 @@ async def test_logging_500_exception(
     """
     Test the log message of a unhandled exception.
     """
-    with patch(
-        '{{cookiecutter.project_slug}}.logging.highlight', side_effect=lambda x, y, z: x
-    ):  # prevents highlighting
-        response = await logging_client.get('/divide', params={'a': 1, 'b': 0})
+    response = await logging_client.get('/divide', params={'a': 1, 'b': 0})
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert response.text == 'Internal Server Error'
 
