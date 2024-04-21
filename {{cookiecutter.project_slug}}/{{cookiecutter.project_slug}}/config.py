@@ -10,7 +10,7 @@ if ENV not in ('production', 'development', 'testing'):
         f'ENV={ENV} is not valid. '
         "It should be 'production', 'development' or 'testing'"
     )
-DEBUG: bool = ENV != 'production'
+DEBUG: bool = ENV == 'development'
 TESTING: bool = ENV == 'testing'
 
 os.environ['LOGURU_LEVEL'] = os.getenv('LOG_LEVEL') or (DEBUG and 'DEBUG') or 'INFO'
