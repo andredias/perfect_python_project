@@ -37,8 +37,8 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
         except ValueError:
             response_length = 0
         data = {
-            'client': atoms['h'],
-            'schema': atoms['S'],
+            'remote_ip': request.headers.get('x-forwarded-for') or atoms['h'],
+            'schema': request.headers.get('x-forwarded-proto') or atoms['S'],
             'protocol': atoms['H'],
             'method': atoms['m'],
             'path_with_query': atoms['Uq'],
