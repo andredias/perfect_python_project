@@ -15,7 +15,8 @@ test:
     line_length: 100\n\
 	" > /tmp/$(TARGET_NAME).yml
 
-	cookiecutter --no-input --config-file /tmp/$(TARGET_NAME).yml -o /tmp .
+	cookiecutter --no-input --config-file /tmp/$(TARGET_NAME).yml \
+	--keep-project-on-failure -o /tmp .
 
 	cd /tmp/$(TARGET_NAME); \
 	poetry run make lint && \
