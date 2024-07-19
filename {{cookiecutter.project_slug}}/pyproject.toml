@@ -26,6 +26,7 @@ python-dotenv = "*"
 tenacity = "*"
 stackprinter = "*"
 uvloop = "*"
+uuid7 = "*"
 
 [tool.poetry.group.dev.dependencies]
 asgi-lifespan = "*"

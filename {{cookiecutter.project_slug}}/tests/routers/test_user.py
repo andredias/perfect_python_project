@@ -1,6 +1,7 @@
 from fastapi import status
 from httpx import AsyncClient
 from pydantic import TypeAdapter
+from uuid_extensions import uuid7
 
 from {{cookiecutter.project_slug}}.models.user import UserInfo, UserInsert, get_user_by_login
 
@@ -22,7 +23,7 @@ async def test_get_user(users: Users, client: AsyncClient) -> None:
     assert UserInfo(**resp.json()) == users[0]
 
     # tries to get inexistent user
-    resp = await client.get(url.format(-1))
+    resp = await client.get(url.format(uuid7()))
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
@@ -54,7 +55,7 @@ async def test_update_user(users: Users, client: AsyncClient) -> None:
     assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # tries to update inexistent user
-    resp = await client.put(url.format(-1), json={'name': name})
+    resp = await client.put(url.format(uuid7()), json={'name': name})
     assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 

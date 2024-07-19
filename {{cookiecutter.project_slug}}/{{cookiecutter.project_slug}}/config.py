@@ -24,5 +24,7 @@ DB_PORT = os.environ['DB_PORT']
 DB_NAME = (TESTING and 'test_' or '') + os.environ['DB_NAME']
 DATABASE_URL = f'postgresql://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
-PASSWORD_MIN_LENGTH = int(os.environ['PASSWORD_MIN_LENGTH']) if 'PASSWORD_MIN_LENGTH' in os.environ else 15
-PASSWORD_MIN_VARIETY = int(os.environ['PASSWORD_MIN_VARIETY']) if 'PASSWORD_MIN_VARIETY' in os.environ else 5
+PASSWORD_MIN_LENGTH = int(os.getenv('PASSWORD_MIN_LENGTH') or 15)
+PASSWORD_MIN_VARIETY = int(os.getenv('PASSWORD_MIN_VARIETY') or 5)
+
+QUERY_LIMIT: int = 30

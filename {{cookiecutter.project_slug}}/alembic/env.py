@@ -1,16 +1,20 @@
+import asyncio
 from logging.config import fileConfig
 
+from databases import Database, DatabaseURL
+from loguru import logger
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
-from {{ cookiecutter.project_slug }} import config as {{ cookiecutter.project_slug }}_config
+from {{ cookiecutter.project_slug }} import config as app_config
 from {{ cookiecutter.project_slug }}.models import *  # noqa: F403
 from {{ cookiecutter.project_slug }}.models import metadata
+from {{ cookiecutter.project_slug }}.resources import connect_database
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option('sqlalchemy.url', {{ cookiecutter.project_slug }}_config.DATABASE_URL)
+config.set_main_option('sqlalchemy.url', app_config.DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -47,6 +51,22 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+async def create_database_if_inexistent() -> None:
+    url = DatabaseURL(app_config.DATABASE_URL).replace(database='postgres')
+    db_root = Database(url)
+    await connect_database(db_root)
+    try:
+        stmt = 'select 1 from pg_database where datname = :name'
+        values = {'name': app_config.DB_NAME}
+        db_exists = await db_root.execute(stmt, values)
+        if not db_exists:
+            stmt = f'create database {app_config.DB_NAME}'
+            logger.warning(stmt)
+            await db_root.execute(stmt)
+    finally:
+        await db_root.disconnect()
+
+
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
@@ -54,12 +74,12 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    asyncio.run(create_database_if_inexistent())
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section, {}),
         prefix='sqlalchemy.',
         poolclass=pool.NullPool,
     )
-
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
 
