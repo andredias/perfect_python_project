@@ -1,23 +1,21 @@
-[tool.poetry]
-name = "{{cookiecutter.project_name}}"
-version = "0.1.0"
+[project]
+name = "{{cookiecutter.project_slug}}"
 description = ""
-authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
-package-mode = false
+authors = [
+    {name="{{cookiecutter.author}}", email="{{cookiecutter.email}}"},
+]
+dynamic = ["version"]
+requires-python = "~={{cookiecutter.python_version}}.0"
+readme = "README.rst"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.dependencies]
-python = "^{{cookiecutter.python_version}}"
-
-[tool.poetry.group.dev.dependencies]
-mypy = "*"
-pip-audit = "*"
-pytest = "*"
-pytest-cov = "*"
-ruff = "*"
+[dependency-groups]
+dev = [
+    "mypy",
+    "pip-audit",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning"]

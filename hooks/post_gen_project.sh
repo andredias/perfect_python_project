@@ -2,10 +2,8 @@
 
 set -xuo pipefail
 
-poetry env use {{cookiecutter.python_version}}
-poetry lock --no-update
-poetry install
-poetry run make format
+uv sync --no-install-project
+uv run make format
 
 commit_message="Initial project structure based on https://github.com/andredias/perfect_python_project/tree/master"
 

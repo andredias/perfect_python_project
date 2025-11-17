@@ -8,8 +8,8 @@ The article `How to Set up a Perfect Python Project <https://blog.pronus.xyz/en/
 Features
 --------
 
-* Python 3.10+ (configurable)
-* Poetry_ based dependency management
+* Python 3.14+ (configurable)
+* uv_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
 * Linting based on ruff_, mypy_ and others
@@ -20,17 +20,17 @@ Instructions
 ============
 
 To instantiate the template into a new project, you'll need cookiecutter_ (>=2.4.0).
-The best way to use it just once is through pipx_:
+The best way to use it just once is through uvx_:
 
 .. code:: console
 
-    $ pipx run cookiecutter gh:andredias/perfect_python_project
+    $ uvx run cookiecutter gh:andredias/perfect_python_project
 
-If you prefer, use can install it throught `pip` instead:
+If you prefer, use can install it throught ``uv tool`` instead:
 
 .. code:: console
 
-    $ pip install --user cookiecutter
+    $ uv tool install cookiecutter
 
 Next, run the following command:
 
@@ -58,7 +58,7 @@ That's it!
 
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
 .. _mypy: http://mypy-lang.org/
-.. _pipx: https://pypa.github.io/pipx/
-.. _Poetry: https://python-poetry.org/
 .. _pytest: https://pytest.org
 .. _ruff: https://pypi.org/project/ruff/
+.. _uv: https://docs.astral.sh/uv/
+.. _uvx: https://docs.astral.sh/uv/guides/tools/
