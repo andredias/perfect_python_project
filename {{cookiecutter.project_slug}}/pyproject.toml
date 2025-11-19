@@ -1,34 +1,34 @@
-[tool.poetry]
-name = "{{cookiecutter.project_name}}"
-version = "0.1.0"
+[project]
+name = "{{cookiecutter.project_slug}}"
 description = ""
-authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
-package-mode = false
+authors = [
+    {name="{{cookiecutter.author}}", email="{{cookiecutter.email}}"},
+]
+dynamic = ["version"]
+requires-python = "~={{cookiecutter.python_version}}.0"
+readme = "README.rst"
+dependencies = [
+    "fastapi",
+    "hypercorn",
+    "loguru",
+    "orjson",
+    "pygments",
+    "python-dotenv",
+    "stackprinter",
+    "uvloop",
+]
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.dependencies]
-fastapi = "*"
-hypercorn = "*"
-loguru = "*"
-orjson = "*"
-pygments = "*"
-python = "^{{cookiecutter.python_version}}"
-python-dotenv = "*"
-stackprinter = "*"
-uvloop = "*"
-
-[tool.poetry.group.dev.dependencies]
-asgi-lifespan = "*"
-alt-pytest-asyncio = "*"
-httpx = { version = "*", extras = ["cli"] }
-mypy = "*"
-pip-audit = "*"
-pytest = "*"
-pytest-cov = "*"
-ruff = "*"
+[dependency-groups]
+dev = [
+    "asgi-lifespan",
+    "alt-pytest-asyncio",
+    "httpx[cli,http2]",
+    "mypy",
+    "pip-audit",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::DeprecationWarning"]
