@@ -1,39 +1,43 @@
-[tool.poetry]
-name = "{{cookiecutter.project_name}}"
-version = "0.1.0"
+[project]
+name = "{{cookiecutter.project_slug}}"
 description = ""
-authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
+authors = [
+    {name="{{cookiecutter.author}}", email="{{cookiecutter.email}}"},
+]
+dynamic = ["version"]
+requires-python = "~={{cookiecutter.python_version}}.0"
+readme = "README.rst"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+dependencies = [
+    "fastapi",
+    "hypercorn",
+    "jinja2",
+    "jinja2-fragments",
+    "loguru",
+    "orjson",
+    "pygments",
+    "python-dotenv",
+    "stackprinter",
+    "uvloop",
+]
 
-[tool.poetry.dependencies]
-fastapi = "*"
-hypercorn = "*"
-jinja2 = "*"
-jinja2-fragments = "*"
-loguru = "*"
-orjson = "*"
-pygments = "*"
-python = "^{{cookiecutter.python_version}}"
-python-dotenv = "*"
-stackprinter = "*"
-uvloop = "*"
-
-[tool.poetry.group.dev.dependencies]
-asgi-lifespan = "*"
-alt-pytest-asyncio = "*"
-httpx = {version = "*", extras = ["cli"]}
-mypy = "*"
-pip-audit = "*"
-pytest = "*"
-pytest-cov = "*"
-ruff = "*"
+[dependency-groups]
+dev = [
+    "asgi-lifespan",
+    "httpx[cli,http2]",
+    "mypy",
+    "pip-audit",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
 
 [tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_test_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session"
 filterwarnings = ["ignore::DeprecationWarning"]
-default_async_timeout = 600
 
 [tool.mypy]
 ignore_missing_imports = true
@@ -42,6 +46,9 @@ plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = {{cookiecutter.line_length}}
+target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
+
+[tool.ruff.lint]
 select = [
     "ARG",
     "B",
@@ -63,12 +70,11 @@ select = [
     "W",
 ]
 ignore = ["B008"]
-target-version = "py{{cookiecutter.python_version.replace('.', '')}}"
 
 [tool.ruff.format]
 quote-style = "single"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/**" = ["ARG", "PLR2004", "S"]
 "smoke_test.py" = ["S"]

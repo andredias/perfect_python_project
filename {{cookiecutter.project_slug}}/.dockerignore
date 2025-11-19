@@ -1,7 +1,8 @@
 *
+!entrypoint.sh
 !pyproject.toml
-!poetry.lock
-!hypercorn.toml
+!README.rst
+!uv.lock
 !{{cookiecutter.project_slug}}/
 !static/
 !templates/

@@ -1,12 +1,5 @@
 services:
     app:
-        command:
-            [
-                "hypercorn",
-                "--config=hypercorn.toml",
-                "--reload",
-                "{{cookiecutter.project_slug}}.main:app"
-            ]
         volumes:
             - ./{{cookiecutter.project_slug}}/:/app/{{cookiecutter.project_slug}}/
         environment:
