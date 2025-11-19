@@ -21,18 +21,20 @@ dependencies = [
 [dependency-groups]
 dev = [
     "asgi-lifespan",
-    "alt-pytest-asyncio",
     "httpx[cli,http2]",
     "mypy",
     "pip-audit",
     "pytest",
+    "pytest-asyncio",
     "pytest-cov",
     "ruff",
 ]
 
 [tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_test_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session"
 filterwarnings = ["ignore::DeprecationWarning"]
-default_async_timeout = 600
 
 [tool.mypy]
 ignore_missing_imports = true
