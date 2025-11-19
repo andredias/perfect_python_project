@@ -1,5 +1,5 @@
-FastAPI Minimum Project Template
-================================
+HTMX FastAPI Minimum Project Template
+=====================================
 
 This project template creates the basic structure for a minimum FastAPI application.
 It extends the `Perfect Python Project <https://github.com/andredias/perfect_python_project/tree/master>`_ template.
