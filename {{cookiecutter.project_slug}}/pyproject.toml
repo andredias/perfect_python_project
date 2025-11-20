@@ -1,47 +1,60 @@
-[tool.poetry]
-name = "{{cookiecutter.project_name}}"
-version = "0.1.0"
+[project]
+name = "{{cookiecutter.project_slug}}"
 description = ""
-authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
-package-mode = false
+authors = [
+    {name="{{cookiecutter.author}}", email="{{cookiecutter.email}}"},
+]
+dynamic = ["version"]
+requires-python = "~={{cookiecutter.python_version}}.0"
+readme = "README.rst"
+dependencies = [
+    "alembic",
+    "asyncpg",
+    "databases",
+    "email_validator",
+    "fastapi",
+    "hypercorn",
+    "loguru",
+    "orjson",
+    "pygments",
+    "python-dotenv",
+    "stackprinter",
+    "uvloop",
+    "fastapi",
+    "hypercorn",
+    "loguru",
+    "passlib[argon2]",
+    "psycopg2-binary",
+    "orjson",
+    "pygments",
+    "python-dotenv",
+    "tenacity",
+    "stackprinter",
+    "uvloop",
+    "uuid7",
+]
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "asgi-lifespan",
+    "Faker",
+    "httpx[cli,http2]",
+    "mypy",
+    "pip-audit",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
 
-[tool.poetry.dependencies]
-alembic = "*"
-asyncpg = "*"
-databases = "*"
-email_validator = "*"
-fastapi = "*"
-hypercorn = "*"
-loguru = "*"
-passlib = { extras = ["argon2"], version = "*" }
-psycopg2-binary = "*"
-orjson = "*"
-pygments = "*"
-python = "^{{cookiecutter.python_version}}"
-python-dotenv = "*"
-tenacity = "*"
-stackprinter = "*"
-uvloop = "*"
-uuid7 = "*"
-
-[tool.poetry.group.dev.dependencies]
-asgi-lifespan = "*"
-alt-pytest-asyncio = "*"
-Faker = "*"
-httpx = { version = "*", extras = ["cli"] }
-mypy = "*"
-pip-audit = "*"
-pytest = "*"
-pytest-cov = "*"
-ruff = "*"
+[tool.setuptools]
+packages = ["{{cookiecutter.project_slug}}"]
 
 [tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_test_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session"
 filterwarnings = ["ignore::DeprecationWarning"]
-default_async_timeout = 600
 
 [tool.mypy]
 ignore_missing_imports = true

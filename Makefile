@@ -20,8 +20,8 @@ test:
 	--keep-project-on-failure -o /tmp .
 
 	cd /tmp/$(TARGET_NAME); \
-	poetry run make lint && \
-	poetry run make test && \
-	poetry run make audit && \
-	poetry run make smoke_test && \
+	uv run make lint && \
+	uv run make test && \
+	uv run make audit && \
+	uv run make smoke_test && \
 	echo '\nSuccess!'

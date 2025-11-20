@@ -2,7 +2,7 @@ import json
 from collections.abc import AsyncIterable
 
 from fastapi import APIRouter, FastAPI, status
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 from pytest import CaptureFixture, fixture
 
 basic_log_fields = {
@@ -50,7 +50,7 @@ async def logging_client() -> AsyncIterable[AsyncClient]:
 
     init_loguru()
 
-    async with AsyncClient(app=app, base_url='http://test_logging') as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test_logging') as client:
         yield client
 
     return

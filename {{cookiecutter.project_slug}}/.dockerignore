@@ -2,7 +2,9 @@
 !alembic*
 !entrypoint.sh
 !migrate_database.py
+!entrypoint.sh
 !pyproject.toml
-!poetry.lock
+!README.rst
+!uv.lock
 !{{cookiecutter.project_slug}}/
 **/__pycache__

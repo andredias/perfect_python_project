@@ -16,8 +16,8 @@ Features
 
 * FastAPI_ web framework
 * Asynchronous database support based on `Encode Databases`_ and `SQLAlchemy Core`_
-* Python 3.12+ (configurable)
-* Poetry_ based dependency management
+* Python 3.14+ (configurable)
+* uv_ based dependency management
 * Development tasks registered in a ``Makefile`` for easy access and management
 * Custom Mercurial/Git hooks for ``pre-commit`` and ``pre-push`` events
 * Linting based on ruff_, mypy_ and others
@@ -36,17 +36,21 @@ Instructions
 ============
 
 To instantiate the template into a new project, you'll need cookiecutter_ (>=2.4.0).
-The best way to use it just once is through pipx_:
+The best way to use it just once is through uvx_:
 
 .. code:: console
 
+<<<<<<< working copy
     $ pipx run cookiecutter gh:andredias/perfect_python_project -c fastapi-complete
+=======
+    $ uvx run cookiecutter gh:andredias/perfect_python_project -c fastapi-minimum
+>>>>>>> merge rev
 
-If you prefer, use can install it throught `pip` instead:
+If you prefer, use can install it throught ``uv tool`` instead:
 
 .. code:: console
 
-    $ pip install --user cookiecutter
+    $ uv tool install cookiecutter
 
 Next, run the following command:
 
@@ -85,9 +89,9 @@ That's it!
 .. _HTTPX: https://www.python-httpx.org/
 .. _Loguru: https://github.com/Delgan/loguru
 .. _mypy: http://mypy-lang.org/
-.. _pipx: https://pypa.github.io/pipx/
-.. _Poetry: https://python-poetry.org/
 .. _pytest: https://pytest.org
 .. _python-dotenv: https://pypi.org/project/python-dotenv/
 .. _ruff: https://pypi.org/project/ruff/
 .. _SQLAlchemy Core: https://docs.sqlalchemy.org/en/latest/core/
+.. _uv: https://docs.astral.sh/uv/
+.. _uvx: https://docs.astral.sh/uv/guides/tools/

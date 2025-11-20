@@ -44,4 +44,7 @@ install_hooks:
 
 
 check_env:
-	@ if [ ! -f ".env" ]; then echo '.env not found'; exit 1; fi
+	@ if [ ! -f ".env" ]; then \
+		cp sample.env .env; \
+		echo '.env created from sample.env'; \
+	fi

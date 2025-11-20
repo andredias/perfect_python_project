@@ -5,7 +5,7 @@ from typing import AsyncIterable
 
 from asgi_lifespan import LifespanManager
 from fastapi import FastAPI
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 from pytest import fixture
 
 os.environ['ENV'] = 'testing'
@@ -45,7 +45,7 @@ async def app(session_app: FastAPI) -> AsyncIterable[FastAPI]:
 
 @fixture
 async def client(app: FastAPI) -> AsyncIterable[AsyncClient]:
-    async with AsyncClient(app=app, base_url='http://testserver') as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url='http://testserver') as client:
         yield client
 
 
