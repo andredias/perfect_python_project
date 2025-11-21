@@ -34,5 +34,6 @@ uv run make format
 if [ "{{cookiecutter.version_control}}" == "hg" ]; then
     hg commit -Am 'Initial alembic migration'
 else
+    git add .
     git commit -am 'Initial alembic migration'
 fi
