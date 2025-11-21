@@ -5,16 +5,40 @@ on: [push]
 jobs:
 
   test_template:
-    runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            vcs: [hg, git]
     steps:
 
-        - name: Set up python
-          uses: actions/setup-python@v4
-          with:
-              python-version: '3.12'
-
         - name: Check out repository
-          uses: actions/checkout@v3
+          uses: actions/checkout@v5
 
-        - name: Test
-          run: make test
+        - name: Set up python
+          uses: actions/setup-python@v6
+          with:
+              python-version-file: 'pyproject.toml'
+
+        - name: Install uv
+          uses: astral-sh/setup-uv@v6
+          with:
+              version: "0.9.8"
+              enable-cache: true
+
+        - name: Install dependencies
+          run: uv sync --locked --no-install-project
+
+        - name: Set authorship for git
+          if: matrix.vcs == 'git'
+          run: |
+              git config --global init.defaultBranch main
+              git config --global user.name "GitHub Actions"
+              git config --global user.email "actions@github.com"
+
+        - name: Test template instantiation
+          run: uv run make test
+          env:
+              VCS: ${{ matrix.vcs }}
+
+        - name: Minimize uv cache
+          run: uv cache prune --ci

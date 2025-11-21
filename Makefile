@@ -1,5 +1,6 @@
 TARGET_NAME := "fastapi_complete"
 PYTHON_VERSION := $(shell python --version | sed -r -e 's/Python //' -e 's/\.[0-9]+$$//')
+VCS ?= hg
 
 test:
 	@echo Target: /tmp/$(TARGET_NAME)
@@ -14,6 +15,7 @@ test:
     project_slug: \"$(TARGET_NAME)\"\n\
     python_version: \"$(PYTHON_VERSION)\"\n\
     line_length: 100\n\
+    version_control: \"$(VCS)\"\n\
 	" > /tmp/$(TARGET_NAME).yml
 
 	cookiecutter --no-input --config-file /tmp/$(TARGET_NAME).yml \
