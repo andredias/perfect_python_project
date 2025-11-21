@@ -28,7 +28,14 @@ jobs:
         - name: Install dependencies
           run: uv sync --locked --no-install-project
 
-        - name: Test
+        - name: Set authorship for git
+          if: matrix.vcs == 'git'
+          run: |
+              git config --global init.defaultBranch main
+              git config --global user.name "GitHub Actions"
+              git config --global user.email "actions@github.com"
+
+        - name: Test template instantiation
           run: uv run make test
           env:
               VCS: ${{ matrix.vcs }}
