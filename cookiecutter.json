@@ -1,7 +1,7 @@
 {
   "author": "",
   "email": "",
-  "project_name": "HTMX_Minimum_FastAPI_Project",
+  "project_name": "FastAPI HTMX Minimum",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "python_version": "3.14",
   "line_length": 100,

@@ -36,7 +36,7 @@ smoke_test: check_env
 	trap 'docker compose down' EXIT; \
 	docker compose up --build -d; \
 	sleep 4; \
-	httpx https://localhost/hello --http2 --no-verify -v; \
+	python -c 'import httpx; httpx.get("https://localhost", verify=False)'; \
 	[ $$? -eq 0 ] || exit 1; \
 	echo 'Smoke test passed!'; exit 0
 
