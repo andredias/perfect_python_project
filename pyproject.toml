@@ -1,0 +1,13 @@
+[project]
+name = "perfect-python-project"
+version = "0.1.0"
+description = "This project template creates the basic structure for a Python project."
+authors = [
+    {name="André Miras", email="andre.miras@example.com"},
+]
+readme = "README.rst"
+requires-python = ">=3.14"
+dependencies = [
+    "cookiecutter",
+    "mercurial",
+]
