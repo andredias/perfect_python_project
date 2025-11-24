@@ -4,7 +4,6 @@ from time import time
 
 from fastapi import Request, Response
 from fastapi.responses import PlainTextResponse
-from hypercorn.logging import AccessLogAtoms
 from loguru import logger
 
 from . import config
@@ -27,26 +26,20 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             response = PlainTextResponse('Internal Server Error', status_code=500)
         final_time = time()
         elapsed = final_time - start_time
-        response_dict = {
-            'status': response.status_code,
-            'headers': response.headers.raw,
-        }
-        atoms = AccessLogAtoms(request, response_dict, final_time)  # type: ignore
-        try:
-            response_length = int(atoms['B'])
-        except ValueError:
-            response_length = 0
+        response_length = request.headers.get('content-length', 0)
+        query_string = request['query_string'].decode()
+        path_with_qs = request['path'] + ('?' + query_string if query_string else '')
         data = {
-            'remote_ip': request.headers.get('x-forwarded-for') or atoms['h'],
-            'schema': request.headers.get('x-forwarded-proto') or atoms['S'],
-            'protocol': atoms['H'],
-            'method': atoms['m'],
-            'path_with_query': atoms['Uq'],
+            'remote_ip': request.headers.get('x-forwarded-for') or request['client'],
+            'schema': request.headers.get('x-forwarded-proto') or request['scheme'],
+            'protocol': request.get('http_version', 'ws'),
+            'method': request.get('method', 'GET'),
+            'path_with_query': path_with_qs,
             'status_code': response.status_code,
             'response_length': response_length,
             'elapsed': elapsed,
-            'referer': atoms['f'],
-            'user_agent': atoms['a'],
+            'referer': request.headers.get('referer', ''),
+            'user_agent': request.headers.get('user-agent', ''),
         }
         if not exception:
             logger.info('log request', **data)

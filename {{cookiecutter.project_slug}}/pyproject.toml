@@ -13,6 +13,7 @@ dependencies = [
     "databases",
     "email_validator",
     "fastapi",
+    "granian[reload,uvloop]",
     "hypercorn",
     "loguru",
     "orjson",
