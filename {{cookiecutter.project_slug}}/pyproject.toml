@@ -9,6 +9,7 @@ requires-python = "~={{cookiecutter.python_version}}.0"
 readme = "README.rst"
 dependencies = [
     "fastapi",
+    "granian[reload,uvloop]",
     "hypercorn",
     "loguru",
     "orjson",
