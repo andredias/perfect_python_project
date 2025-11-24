@@ -10,6 +10,7 @@ readme = "README.rst"
 
 dependencies = [
     "fastapi",
+    "granian[reload,uvloop]",
     "hypercorn",
     "jinja2",
     "jinja2-fragments",
