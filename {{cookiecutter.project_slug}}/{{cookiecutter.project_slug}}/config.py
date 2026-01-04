@@ -18,13 +18,13 @@ os.environ['LOGURU_DEBUG_COLOR'] = '<fg #777>'
 REQUEST_ID_LENGTH: int = int(os.getenv('REQUEST_ID_LENGTH', '8'))
 PYGMENTS_STYLE: str = os.getenv('PYGMENTS_STYLE', 'github-dark')
 
-DB_PASSWORD = os.environ['DB_PASSWORD']
-DB_HOST = TESTING and 'localhost' or os.environ['DB_HOST']
-DB_PORT = os.environ['DB_PORT']
-DB_NAME = (TESTING and 'test_' or '') + os.environ['DB_NAME']
-DATABASE_URL = f'postgresql://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+DB_PASSWORD: str = os.environ['DB_PASSWORD']
+DB_HOST: str = TESTING and 'localhost' or os.environ['DB_HOST']
+DB_PORT: str = os.environ['DB_PORT']
+DB_NAME: str = (TESTING and 'test_' or '') + os.environ['DB_NAME']
+DATABASE_URL: str = f'postgresql://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
-PASSWORD_MIN_LENGTH = int(os.getenv('PASSWORD_MIN_LENGTH') or 15)
-PASSWORD_MIN_VARIETY = int(os.getenv('PASSWORD_MIN_VARIETY') or 5)
+PASSWORD_MIN_LENGTH: int = int(os.getenv('PASSWORD_MIN_LENGTH') or 15)
+PASSWORD_MIN_VARIETY: int= int(os.getenv('PASSWORD_MIN_VARIETY') or 5)
 
 QUERY_LIMIT: int = 30
