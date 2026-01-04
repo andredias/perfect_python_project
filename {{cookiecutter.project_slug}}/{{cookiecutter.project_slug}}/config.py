@@ -15,5 +15,5 @@ TESTING: bool = ENV == 'testing'
 
 os.environ['LOGURU_LEVEL'] = os.getenv('LOG_LEVEL') or ((DEBUG or TESTING) and 'DEBUG') or 'INFO'
 os.environ['LOGURU_DEBUG_COLOR'] = '<fg #777>'
-REQUEST_ID_LENGTH = int(os.getenv('REQUEST_ID_LENGTH', '8'))
-PYGMENTS_STYLE = os.getenv('PYGMENTS_STYLE', 'github-dark')
+REQUEST_ID_LENGTH: int = int(os.getenv('REQUEST_ID_LENGTH', '8'))
+PYGMENTS_STYLE: str = os.getenv('PYGMENTS_STYLE', 'github-dark')
