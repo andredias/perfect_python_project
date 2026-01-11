@@ -22,7 +22,7 @@ DB_PASSWORD: str = os.environ['DB_PASSWORD']
 DB_HOST: str = TESTING and 'localhost' or os.environ['DB_HOST']
 DB_PORT: str = os.environ['DB_PORT']
 DB_NAME: str = (TESTING and 'test_' or '') + os.environ['DB_NAME']
-DATABASE_URL: str = f'postgresql://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+DATABASE_URL: str = f'postgresql+asyncpg://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 PASSWORD_MIN_LENGTH: int = int(os.getenv('PASSWORD_MIN_LENGTH') or 15)
 PASSWORD_MIN_VARIETY: int= int(os.getenv('PASSWORD_MIN_VARIETY') or 5)

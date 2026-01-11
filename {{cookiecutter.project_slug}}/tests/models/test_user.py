@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from pytest import mark, raises
+from sqlalchemy.exc import IntegrityError
 from uuid_extensions import uuid7
 
 from {{cookiecutter.project_slug}}.models import diff_models, user
@@ -82,3 +83,33 @@ def test_user_schema(UserSchema: BaseModel) -> None:  # noqa: N803
     assert 'Password length' in str(error)
 
     UserSchema(name='abcdef', email='valid@email.com', password='valid password!!!')  # type: ignore
+
+async def test_insert_user(users: Users) -> None:
+    new_user = UserInsert(name='Paulo', email='paulo@email.com', password='Paulo Paulada Power')
+    id = await user.insert(new_user)
+    assert id and id not in [u.id for u in users]
+
+    with raises(IntegrityError):
+        await user.insert(new_user)
+
+
+async def test_update_user(users: Users) -> None:
+    password = 'Another Valid Password 123!!!'
+    patch = UserPatch(name='Alfredo', password=password)
+    await user.update(users[0].id, patch)
+    updated_user = await user.get_user(users[0].id)
+    assert updated_user
+    assert updated_user.name == 'Alfredo'
+
+    assert (await user.get_user_by_login(users[0].email, password)) == updated_user
+
+    with raises(IntegrityError):
+        await user.update(users[0].id, UserPatch(email=users[1].email))
+
+
+async def test_delete_user(users: Users) -> None:
+    await user.delete(users[0].id)
+    deleted_user = await user.get_user(users[0].id)
+    assert deleted_user is None
+
+    await user.delete(users[0].id)  # shouldn't raise any error

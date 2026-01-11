@@ -1,12 +1,15 @@
 from collections.abc import Callable
 from secrets import token_urlsafe
 from time import time
+from typing import Final
 
-from fastapi import Request, Response
+from fastapi import Request, Response, status
 from fastapi.responses import PlainTextResponse
 from loguru import logger
 
 from . import config
+from . import resources as res
+from .resources import connection_ctx
 
 
 async def log_request_middleware(request: Request, call_next: Callable) -> Response:
@@ -47,4 +50,30 @@ async def log_request_middleware(request: Request, call_next: Callable) -> Respo
             logger.opt(exception=exception).error('Unhandled exception', **data)
     response.headers['X-Request-ID'] = request_id
     response.headers['X-Processed-Time'] = str(elapsed)
+    return response
+
+
+COMMIT: Final[int] = 0
+ROLLBACK: Final[int] = 1
+
+async def database_connection_middleware(request: Request, call_next: Callable) -> Response:
+    '''
+    Middleware that ensures that the database connection is closed after the request is processed.
+    '''
+    if res.connection_ctx.get():  # the database connection will be managed elsewhere in tests
+        return await call_next(request)
+    db_action: int = ROLLBACK
+    connection = await res.engine.connect()
+    token = connection_ctx.set(connection)
+    try:
+        response = await call_next(request)
+        if response.status_code < status.HTTP_400_BAD_REQUEST:
+            db_action = COMMIT
+    finally:
+        if db_action == COMMIT:
+            await connection.commit()
+        else:
+            await connection.rollback()
+        await connection.close()
+        connection_ctx.reset(token)
     return response

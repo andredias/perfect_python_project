@@ -1,12 +1,11 @@
 from uuid import UUID
 
-from asyncpg.exceptions import IntegrityConstraintViolationError
 from fastapi import APIRouter, HTTPException, Response, status
 from loguru import logger
+from sqlalchemy.exc import IntegrityError
 
 from ..models import diff_models
 from ..models.user import UserInfo, UserInsert, UserPatch, delete, get_all, get_user, insert, update
-from ..resources import db
 
 router = APIRouter(prefix='/users', tags=['users'])
 
@@ -17,11 +16,14 @@ async def get_all_users() -> list[UserInfo]:
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)
-@db.transaction()
 async def insert_user(info: UserInsert, response: Response) -> UserInfo:
-    id = await insert(info)
+    try:
+        id = await insert(info)
+    except IntegrityError:
+        logger.info(f'Integrity violation inserting {info}')
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY) from None
     response.headers['Location'] = f'/users/{id}'
-    return await get_user(id)  # type: ignore
+    return UserInfo(id=id, name=info.name, email=info.email)
 
 
 @router.get('/{id}')
@@ -33,24 +35,19 @@ async def get_user_info(id: UUID) -> UserInfo:
 
 
 @router.put('/{id}')
-@db.transaction()
-async def update_user(
-    id: UUID,
-    patch: UserPatch,
-) -> UserInfo:
+async def update_user(id: UUID, patch: UserPatch) -> UserInfo:
     user = await get_user(id)
     if not user:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
     patch = UserPatch(**diff_models(user, patch))
     try:
         await update(id, patch)
-    except IntegrityConstraintViolationError:
+    except IntegrityError:
         logger.info(f'Integrity violation in {user} vs {patch}')
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY) from None
-    return await get_user(id)  # type: ignore
+    return UserInfo(id=id, name=patch.name or user.name, email=patch.email or user.email)
 
 
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-@db.transaction()
 async def delete_user(id: UUID) -> None:
     await delete(id)

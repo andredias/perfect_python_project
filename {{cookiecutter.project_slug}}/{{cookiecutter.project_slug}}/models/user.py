@@ -2,7 +2,6 @@ from typing import Annotated
 from uuid import UUID
 
 import orjson as json
-from loguru import logger
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr
 from pydantic.functional_validators import AfterValidator
@@ -11,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID as UUID_
 from uuid_extensions import uuid7
 
 from .. import config
-from ..resources import db
+from ..resources import db_execute
 from . import metadata
 
 crypt_ctx = CryptContext(schemes=['argon2'])
@@ -64,31 +63,27 @@ class UserPatch(BaseModel):
 
 async def get_all(limit: int = config.QUERY_LIMIT, offset: int = 0) -> list[UserInfo]:
     query = User.select().limit(limit).offset(offset)
-    logger.debug(query)
-    result = await db.fetch_all(query)
+    result = await db_execute(query)
     return [UserInfo(**r._mapping) for r in result]
 
 
 async def get_user_by_email(email: str) -> UserInfo | None:
     query = User.select().where(User.c.email == email)
-    logger.debug(query)
-    result = await db.fetch_one(query)
+    result = (await db_execute(query)).first()
     return UserInfo(**result._mapping) if result else None
 
 
 async def get_user_by_login(email: str, password: str) -> UserInfo | None:
     query = User.select().where(User.c.email == email)
-    logger.debug(query)
-    result = await db.fetch_one(query)
-    if result and crypt_ctx.verify(password, result['password_hash']):
+    result = (await db_execute(query)).first()
+    if result and crypt_ctx.verify(password, result._mapping['password_hash']):
         return UserInfo(**result._mapping)
     return None
 
 
 async def get_user(id: UUID) -> UserInfo | None:
     query = User.select().where(User.c.id == id)
-    logger.debug(query)
-    result = await db.fetch_one(query)
+    result = (await db_execute(query)).first()
     if result:
         return UserInfo(**result._mapping)
     return None
@@ -101,22 +96,21 @@ async def insert(user: UserInsert) -> UUID:
         fields['password_hash'] = crypt_ctx.hash(password)
     fields['id'] = uuid7()
     stmt = User.insert().values(fields)
-    logger.debug(stmt)
-    await db.execute(stmt)
+    await db_execute(stmt)
     return fields['id']
 
 
 async def update(id: UUID, patch: UserPatch) -> None:
     fields = patch.model_dump(exclude_unset=True)
+    if not fields:
+        return
     if 'password' in fields:
         password = fields.pop('password')
         fields['password_hash'] = crypt_ctx.hash(password)
     stmt = User.update().where(User.c.id == id).values(**fields)
-    logger.debug(stmt)
-    await db.execute(stmt)
+    await db_execute(stmt)
 
 
 async def delete(id: UUID) -> None:
     stmt = User.delete().where(User.c.id == id)
-    logger.debug(stmt)
-    await db.execute(stmt)
+    await db_execute(stmt)

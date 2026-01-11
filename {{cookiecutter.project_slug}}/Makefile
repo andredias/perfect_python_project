@@ -15,6 +15,7 @@ test: check_env
 	pytest -x \
 		--cov-report=term-missing --cov-report=html --cov-branch \
 		--cov={{cookiecutter.project_slug}}
+	docker compose down
 
 
 lint:

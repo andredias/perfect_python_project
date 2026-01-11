@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eoux pipefail
+set -eox pipefail
 
 if [ -n "$MIGRATE_DB" ]; then
     # ref: https://pythonspeed.com/articles/schema-migrations-server-startup/

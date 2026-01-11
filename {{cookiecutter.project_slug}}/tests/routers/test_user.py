@@ -1,6 +1,7 @@
 from fastapi import status
 from httpx import AsyncClient
 from pydantic import TypeAdapter
+from sqlalchemy.ext.asyncio import AsyncConnection
 from uuid_extensions import uuid7
 
 from {{cookiecutter.project_slug}}.models.user import UserInfo, UserInsert, get_user_by_login
@@ -32,6 +33,10 @@ async def test_update_user(users: Users, client: AsyncClient) -> None:
     password = 'valid password!!!'
     name = 'Belafonte'
 
+    # tries to update inexistent user
+    resp = await client.put(url.format(uuid7()), json={'name': name})
+    assert resp.status_code == status.HTTP_404_NOT_FOUND
+
     # update ok
     resp = await client.put(url.format(users[0].id), json={'password': password})
     assert resp.status_code == status.HTTP_200_OK
@@ -54,10 +59,6 @@ async def test_update_user(users: Users, client: AsyncClient) -> None:
     resp = await client.put(url.format(users[0].id), json={'email': users[1].email})
     assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    # tries to update inexistent user
-    resp = await client.put(url.format(uuid7()), json={'name': name})
-    assert resp.status_code == status.HTTP_404_NOT_FOUND
-
 
 async def test_delete_user(users: Users, client: AsyncClient) -> None:
     url = '/users/{}'
@@ -73,7 +74,7 @@ async def test_delete_user(users: Users, client: AsyncClient) -> None:
     assert resp.status_code == status.HTTP_204_NO_CONTENT
 
 
-async def test_create_user(client: AsyncClient) -> None:
+async def test_create_user(db_connection: AsyncConnection,client: AsyncClient) -> None:
     from faker import Faker
 
     fake = Faker()
@@ -83,7 +84,7 @@ async def test_create_user(client: AsyncClient) -> None:
         email=fake.email(),
         password=fake.password(20),
     )
-    resp = await client.post('/users', content=user.json())
+    resp = await client.post('/users', content=user.model_dump_json())
     assert resp.status_code == status.HTTP_201_CREATED
     new_user = UserInfo(**resp.json())
     assert resp.headers['Location'] == f'/users/{new_user.id}'

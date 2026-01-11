@@ -1,20 +1,21 @@
-import asyncio
 from logging.config import fileConfig
+from urllib.parse import urlparse
 
-from databases import Database, DatabaseURL
 from loguru import logger
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import create_engine, engine_from_config, pool, text
 
 from alembic import context
 from {{ cookiecutter.project_slug }} import config as app_config
 from {{ cookiecutter.project_slug }}.models import *  # noqa: F403
 from {{ cookiecutter.project_slug }}.models import metadata
-from {{ cookiecutter.project_slug }}.resources import connect_database
+from {{ cookiecutter.project_slug }}.resources import init_database, test_database_connection, get_db
+
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option('sqlalchemy.url', app_config.DATABASE_URL)
+config.set_main_option('sqlalchemy.url', app_config.DATABASE_URL.replace('+asyncpg', ''))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -24,7 +25,6 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 target_metadata = metadata
-
 
 
 def run_migrations_offline() -> None:
@@ -47,24 +47,23 @@ def run_migrations_offline() -> None:
         dialect_opts={'paramstyle': 'named'},
     )
 
-    with context.begin_transaction():
-        context.run_migrations()
 
-
-async def create_database_if_inexistent() -> None:
-    url = DatabaseURL(app_config.DATABASE_URL).replace(database='postgres')
-    db_root = Database(url)
-    await connect_database(db_root)
+def create_database_if_inexistent() -> None:
+    url = urlparse(app_config.DATABASE_URL)._replace(scheme='postgresql', path='postgres').geturl()
+    engine = create_engine(url, echo=True)
+    stmt = text('select 1 from pg_database where datname = :name')
+    values = {'name': app_config.DB_NAME}
+    conn = engine.connect()
+    conn.execution_options(isolation_level="AUTOCOMMIT")
     try:
-        stmt = 'select 1 from pg_database where datname = :name'
-        values = {'name': app_config.DB_NAME}
-        db_exists = await db_root.execute(stmt, values)
+        db_exists = conn.execute(stmt, values).first() is not None
         if not db_exists:
-            stmt = f'create database {app_config.DB_NAME}'
+            stmt = text(f'create database {app_config.DB_NAME}')
             logger.warning(stmt)
-            await db_root.execute(stmt)
+            conn.execute(stmt)
     finally:
-        await db_root.disconnect()
+        conn.close()
+        engine.dispose()
 
 
 def run_migrations_online() -> None:
@@ -74,7 +73,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    asyncio.run(create_database_if_inexistent())
+    create_database_if_inexistent()
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix='sqlalchemy.',
