@@ -10,7 +10,6 @@ readme = "README.rst"
 dependencies = [
     "alembic",
     "asyncpg",
-    "databases",
     "email_validator",
     "fastapi",
     "granian[reload,uvloop]",

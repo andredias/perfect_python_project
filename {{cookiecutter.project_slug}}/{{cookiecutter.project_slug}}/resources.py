@@ -5,7 +5,9 @@ from typing import Any
 
 from fastapi import FastAPI
 from loguru import logger
+from sqlalchemy import Result, text
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, create_async_engine
+from sqlalchemy.sql import Executable
 from tenacity import RetryError, retry, stop_after_delay, wait_exponential
 
 from . import config
@@ -80,9 +82,8 @@ async def get_db() -> AsyncConnection:
     return connection
 
 
-async def db_execute(query: Any) -> Any:
-    '''
-    Execute a database query using the current request's connection.
-    '''
+async def db_execute(stmt: Executable | str, *args: Any, **kwargs: Any) -> Result:
     connection = await get_db()
-    return await connection.execute(query)
+    if isinstance(stmt, str):
+        stmt = text(stmt)
+    return await connection.execute(stmt, *args, **kwargs)

@@ -291,18 +291,6 @@ wheels = [
 ]
 
 [[package]]
-name = "databases"
-version = "0.9.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "sqlalchemy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/76/de/ea55722907bd1b2389b01e362faa3c66a09d5a8463c13d44c80da7b32497/databases-0.9.0.tar.gz", hash = "sha256:d2f259677609bf187737644c95fa41701072e995dfeb8d2882f335795c5b61b0", size = 31084, upload-time = "2024-03-01T17:39:28.378Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/43/6035922af5471f1a196851831a1d5f403447401b395f474bf673efa8959f/databases-0.9.0-py3-none-any.whl", hash = "sha256:9ee657c9863b34f8d3a06c06eafbe1bda68af2a434b56996312edf1f1c0b6297", size = 25580, upload-time = "2024-03-01T17:39:26.352Z" },
-]
-
-[[package]]
 name = "defusedxml"
 version = "0.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -366,7 +354,6 @@ source = { virtual = "." }
 dependencies = [
     { name = "alembic" },
     { name = "asyncpg" },
-    { name = "databases" },
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "granian", extra = ["reload", "uvloop"] },
@@ -400,7 +387,6 @@ dev = [
 requires-dist = [
     { name = "alembic" },
     { name = "asyncpg" },
-    { name = "databases" },
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "granian", extras = ["reload", "uvloop"] },
