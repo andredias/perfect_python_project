@@ -26,9 +26,8 @@ async def logging_client() -> AsyncIterable[AsyncClient]:
     """
     from {{cookiecutter.project_slug}}.logging import init_loguru
     from {{cookiecutter.project_slug}}.main import (
-        BaseHTTPMiddleware,
         RequestValidationError,
-        log_request_middleware,
+        LogRequestMiddleware,
         request_validation_exception_handler,
     )
 
@@ -44,7 +43,7 @@ async def logging_client() -> AsyncIterable[AsyncClient]:
 
     app = FastAPI()
     app.include_router(router)
-    app.add_middleware(BaseHTTPMiddleware, dispatch=log_request_middleware)
+    app.add_middleware(LogRequestMiddleware)
     # type annotation issue. See: https://github.com/encode/starlette/pull/2403
     app.add_exception_handler(RequestValidationError, request_validation_exception_handler)  # type: ignore
 
